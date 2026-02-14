@@ -2,6 +2,9 @@ What's inside:
 .
 ├── AGENTS.md                                          # Project rules (universal)
 ├── CLAUDE.md                                          # Claude Code pointer to AGENTS.md
+├── knowledge/
+│   ├── INDEX.md                                       # Research index with freshness tracking
+│   └── research/                                      # Individual research findings
 ├── .claude/agents/
 │   ├── prompt-architect-planner.md                    # Agent — Discovery & Architecture
 │   ├── prompt-architect-builder.md                    # Agent — Prompt Redaction

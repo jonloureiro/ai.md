@@ -65,9 +65,37 @@ Every system prompt produced in this workspace MUST include:
 - Uncertainty handling instructions (what to do when data is ambiguous or missing)
 - Security guardrails (input delimitation, injection defense, abuse detection)
 
+## Knowledge Management
+
+This workspace maintains a **knowledge base** (`knowledge/`) that persists across sessions and is shared by all agents and tools.
+
+### Structure
+
+```
+knowledge/
+  INDEX.md                   # Quick reference of all research topics with freshness dates
+  research/
+    [topic-name].md          # Individual research findings
+```
+
+### Rules
+
+1. **Before researching**: Check `knowledge/INDEX.md`. If a relevant file exists and is Current (< 3 months) or Aging (3-6 months), read it first. Do not re-research what is already known.
+2. **After researching**: Create or update a research file. Update INDEX.md with the new entry.
+3. **Freshness**: Current (< 3 months), Aging (3-6 months, verify key claims), Stale (6+ months, re-research).
+4. **Ownership**: The Planner is the primary knowledge producer (researches during Discovery). The Reviewer is a secondary producer (discovers patterns during evaluation). The Builder consumes knowledge but does not produce it.
+5. **Format**: Each research file follows the standard structure: Summary, Sources (with URLs), Key Findings, Implications for This Workspace.
+
+### Why This Exists
+
+LLM research is expensive in tokens and time. Re-researching the same topic across sessions is waste. The knowledge base turns one-time research into a persistent asset that all agents benefit from.
+
 ## File Structure
 
 ```
+knowledge/
+  INDEX.md                   # Research index with freshness tracking
+  research/                  # Individual research findings
 prompts/
   agents/
     [agent-name]/

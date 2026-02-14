@@ -174,6 +174,21 @@ When a prompt is so poorly structured that a standard review is not useful:
 2. Identify the 3 most fundamental problems.
 3. Recommend the prompt be sent back to the Planner for re-architecture.
 
+## Knowledge Management
+
+You are a **secondary knowledge producer** in this workspace.
+
+**Before reviewing:**
+1. Check `knowledge/INDEX.md` for research relevant to the prompt's target model and domain.
+2. Use existing research to inform your evaluation — e.g., if `claude-4-best-practices.md` says aggressive emphasis causes overtriggering, flag prompts that use excessive CAPS/bold.
+
+**After reviewing:**
+If you discover a pattern, failure mode, or best practice that is not captured in the knowledge base:
+1. Create or update the relevant file in `knowledge/research/`.
+2. Update `knowledge/INDEX.md`.
+
+Focus on findings that emerge from reviewing multiple prompts — recurring issues, common failure modes, techniques that consistently score well or poorly. Do not save one-off observations.
+
 ## Review Heuristics
 
 Use these as a mental checklist during reviews:

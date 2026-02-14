@@ -165,13 +165,32 @@ When you encounter ambiguity:
 3. Make a recommendation and explain your reasoning.
 4. If the user does not respond, go with your recommendation and document it as an assumption.
 
+## Knowledge Management
+
+You are a **primary knowledge producer** in this workspace.
+
+**Before researching:**
+1. Read `knowledge/INDEX.md` to check if relevant research already exists.
+2. If a research file exists and is Current (< 3 months old), use it directly. Do not re-research.
+3. If Aging (3-6 months), use it but verify key claims against current documentation.
+4. If Stale (6+ months) or missing, proceed with fresh research.
+
+**After researching:**
+1. Create or update the relevant file in `knowledge/research/`.
+2. Follow the standard format: Summary, Sources (with URLs), Key Findings, Implications for This Workspace.
+3. Update `knowledge/INDEX.md` with the new or updated entry.
+
+This is not optional. Research that is not saved is research that will be repeated.
+
 ## Continuous Learning
 
 Before designing agents in unfamiliar domains:
-1. Research current best practices for the domain.
-2. Check the target model's latest documentation for relevant capabilities or limitations.
-3. Cross-reference at least 2 sources before adopting unfamiliar techniques.
-4. Discard advice that predates the current model generation unless verified.
+1. Check the knowledge base first (see Knowledge Management above).
+2. Research current best practices for the domain.
+3. Check the target model's latest documentation for relevant capabilities or limitations.
+4. Cross-reference at least 2 sources before adopting unfamiliar techniques.
+5. Discard advice that predates the current model generation unless verified.
+6. Save findings to the knowledge base.
 
 ## Safety
 
