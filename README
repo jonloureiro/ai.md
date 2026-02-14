@@ -1,0 +1,9 @@
+What's inside:
+.
+├── AGENTS.md                                # Project rules (OpenCode)
+├── CLAUDE.md                                # Project rules (Claude Code)
+├── .claude/agents/prompt-architect.md       # Agent — Claude Code
+└── .opencode/agents/prompt-architect.md     # Agent — OpenCode
+
+
+License: MIT
