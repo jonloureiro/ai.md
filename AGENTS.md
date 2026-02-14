@@ -1,85 +1,122 @@
 # AGENTS.md — Prompt Engineering Workspace
 
-> Universal agent instructions for a prompt engineering workspace.
-> Compatible with: OpenCode, Cursor, GitHub Copilot, Codex, Zed, Jules, Claude Code (via reference).
+> Universal agent instructions for AI coding assistants.
+> Compatible with: Claude Code, OpenCode, Cursor, GitHub Copilot, Codex, Zed, Jules.
 
-## Project Purpose
+## Purpose
 
-This workspace is dedicated to **designing, creating, testing, and optimizing system prompts for LLM agents**. All work here follows current best practices in prompt engineering and context engineering.
+This workspace designs, creates, tests, and optimizes **system prompts for LLM agents**. It is a prompt factory: the output is not application code, but the cognitive source code that defines other agents' intelligence and behavior.
 
-The primary agent in this workspace is **PromptArchitect** — a meta-agent that generates system prompts for other AI agents.
+## Language Rule
+
+All `.md` files in this repository MUST be written in English. No exceptions. This includes system prompts, test scenarios, evaluations, templates, and documentation.
 
 ## Core Principles
 
-- **Context is precious**: Treat the context window as a finite, scarce resource. Every token must earn its place.
-- **Context Engineering > Prompt Engineering**: Focus on curating the optimal set of information, not just writing clever phrases.
-- **Heuristics over hardcoded rules**: Give agents principles to reason with, not brittle logic to follow blindly.
-- **Deliberate reasoning by default**: Agents should think step-by-step before responding unless the task is trivially simple.
-- **Test everything**: No prompt ships without at least 4 test scenarios (happy path, edge case, adversarial, failure mode).
-- **Stay current**: Prompt engineering evolves constantly. Research recent techniques and model documentation before applying unfamiliar patterns or working in unfamiliar domains.
+1. **Context Engineering > Prompt Engineering.** The job is not writing clever phrases. It is curating the minimal, high-signal set of information that enters the model's attention budget at each step. Every token must earn its place.
 
-## File Structure
+2. **Heuristics over hardcoded rules.** Give agents principles to reason with, not brittle conditional logic. Rules break on edge cases; principles generalize.
 
-```
-prompts/
-├── agents/           # Completed system prompts for agents
-│   └── [agent-name]/
-│       ├── system-prompt.md    # The system prompt
-│       ├── test-scenarios.md   # Test cases
-│       └── evaluation.md       # Performance metrics
-├── templates/        # Reusable prompt templates
-├── techniques/       # Reference docs on prompting techniques
-└── evaluations/      # Test results and benchmark data
-```
+3. **Deliberate reasoning by default.** Agents should think step-by-step before responding unless the task is trivially simple. The cost of unnecessary reasoning is low; the cost of skipped reasoning is high.
+
+4. **Test everything.** No prompt ships without 4 test scenarios: happy path, edge case, adversarial input, and failure mode. If you cannot test it, you do not understand it.
+
+5. **Stay current.** Prompt engineering evolves fast. Techniques that worked for older model generations may be counterproductive on current ones. Research before applying unfamiliar patterns. Verify against the target model's latest documentation.
+
+6. **Minimal viable context.** More context does not mean better context. Research shows model performance degrades around 32K tokens even with million-token windows due to attention scarcity and the "lost-in-the-middle" phenomenon. Curate aggressively.
+
+## Agents
+
+This workspace uses three specialized agents that form a pipeline:
+
+| Agent | Phase | Function |
+|---|---|---|
+| `prompt-architect-planner` | Discovery + Architecture | Gathers requirements, asks clarifying questions, designs the cognitive architecture |
+| `prompt-architect-builder` | Redaction | Takes the architecture spec and writes the complete system prompt |
+| `prompt-architect-reviewer` | Test + Enhance | Reviews prompts, creates test scenarios, runs self-evaluation, suggests improvements |
+
+Use the **meta-task template** (`prompts/templates/meta-task-create-agent.md`) to orchestrate the full pipeline for creating a new agent.
+
+For simple refinements or quick edits to existing prompts, use the builder directly. For full new agent creation, always run the complete pipeline: Planner -> Builder -> Reviewer.
 
 ## Workflow: D.A.R.T.E. Framework
 
-Every prompt creation follows 5 mandatory phases:
+Every prompt creation follows 5 mandatory phases in order:
 
-1. **Discovery** — Gather requirements: function, target user, target model, tools, output format, constraints, autonomy level, examples
-2. **Architecture** — Design identity (with cognitive bias), reasoning mode (fast vs. deliberate), context strategy, tool design, safety layer
-3. **Redaction** — Write using the 10-component structure: Identity, Goal, Context, Process, Tools, Output Format, Examples, Constraints, Uncertainty Handling, Safety
-4. **Test** — Create 4 scenarios: happy path, edge case, adversarial, failure mode
-5. **Enhance** — Self-evaluate on clarity, completeness, consistency, robustness, efficiency, security. Stress-test against weaker models.
+1. **Discovery** — Gather requirements: primary function, target user, target model, tools, output format, domain constraints, autonomy level, behavioral examples. If information is missing, ASK. Do not guess.
+
+2. **Architecture** — Design cognitive structure: identity with cognitive bias, reasoning mode (System 1 vs System 2), context strategy (static rules vs dynamic loading vs compressed), tool design (minimal viable set), safety layer.
+
+3. **Redaction** — Write the system prompt using the 10-component structure: Identity, Goal, Operational Context, Process/Workflow, Tools, Output Format, Examples, Constraints, Uncertainty Handling, Safety.
+
+4. **Test** — Create 4 test scenarios: happy path (typical input), edge case (ambiguous input), adversarial (injection attempt), failure mode (insufficient data).
+
+5. **Enhance** — Self-evaluate on: clarity, completeness, consistency, robustness, token efficiency, security. If any dimension scores below 3/5, rewrite before delivering.
 
 ## Prompt Quality Standards
 
 Every system prompt produced in this workspace MUST include:
 
-- Clear role definition with intentional cognitive bias
+- Clear role definition with intentional cognitive bias (how the agent thinks, not just what it is)
 - Measurable success criteria
-- Explicit reasoning strategy (CoT, ReAct, ToT, etc.)
+- Explicit reasoning strategy appropriate to task complexity
 - Structured output format with schema or examples
 - At least 2 diverse few-shot examples (including edge cases)
-- Uncertainty handling instructions
-- Security guardrails (input delimitation, injection defense)
-- Model-specific adaptations when target model is known
+- Uncertainty handling instructions (what to do when data is ambiguous or missing)
+- Security guardrails (input delimitation, injection defense, abuse detection)
 
-## Model Adaptation Rules
+## File Structure
 
-When generating prompts, adapt to the target. When unsure about a model's current best practices, check its latest documentation.
-
-- **Claude (Anthropic)**: XML tags for delimitation. Avoid "think" — use "consider"/"evaluate". Extended Thinking via API.
-- **GPT (OpenAI)**: Markdown structure. Force reasoning with `<thinking>` blocks. Use `developer` role.
-- **Gemini (Google)**: Heavy few-shot with diverse examples. Leverage multimodal capabilities.
-- **Llama / Open Source**: Simpler instructions. Smaller context. Explicit few-shot demonstrations.
+```
+prompts/
+  agents/
+    [agent-name]/
+      system-prompt.md       # The system prompt (versioned: v1.0, v1.1)
+      test-scenarios.md      # 4+ test cases
+      evaluation.md          # Performance metrics and results
+  templates/                 # Reusable templates and meta-tasks
+  techniques/                # Reference docs on prompting techniques
+  evaluations/               # Aggregated test results and benchmarks
+```
 
 ## Delivery Format
 
-All prompt deliverables include: metadata (target model, domain, techniques, autonomy, token estimate), the complete prompt, implementation notes (temperature, top_p, tools), 4 test scenarios, and suggested evaluation metrics.
+All prompt deliverables include:
+
+1. **Metadata**: target model, domain, techniques used, autonomy level, estimated token count
+2. **System Prompt**: the complete, ready-to-use prompt
+3. **Implementation Notes**: recommended parameters (temperature, top_p), required tools, dependencies
+4. **Test Scenarios**: 4 scenarios covering happy path, edge case, adversarial, failure mode
+5. **Evaluation Metrics**: how to measure the agent's performance
+
+## Recommended Parameters
+
+| Task Type | Temperature | Top-P |
+|---|---|---|
+| Classification / Extraction | 0.0 - 0.1 | 0.9 |
+| Analysis / Synthesis | 0.3 - 0.5 | 0.9 |
+| Creative Generation | 0.7 - 1.0 | 0.95 |
+| Code Generation | 0.0 - 0.2 | 0.95 |
+| Autonomous Agent | 0.2 - 0.4 | 0.9 |
 
 ## Conventions
 
-- All prompt files are written in Markdown
-- Use semantic versioning for prompts: `v1.0`, `v1.1`, `v2.0`
-- File names use kebab-case: `legal-analyst-agent.md`
-- Comments and annotations use `<!-- HTML comments -->` to avoid being parsed as instructions
-- Temperature recommendations: classification 0.0-0.1, analysis 0.3-0.5, creative 0.7-1.0, code 0.0-0.2, agents 0.2-0.4
+- All files in Markdown, written in English
+- Semantic versioning for prompts: `v1.0`, `v1.1`, `v2.0`
+- File names in kebab-case: `legal-analyst-agent.md`
+- Annotations and internal comments use `<!-- HTML comments -->`
+- Agent files live in `.claude/agents/` (for Claude Code) and `.opencode/agents/` (for OpenCode)
+- Prompt output files live in `prompts/agents/[name]/`
 
-## Important
+## Inviolable Rules
 
-- NEVER generate prompts without following D.A.R.T.E.
-- NEVER skip safety guardrails in any generated prompt
-- ALWAYS include test scenarios with every prompt delivery
-- ALWAYS research before working in unfamiliar domains or with unfamiliar techniques
-- When in doubt, prefer simplicity — the best prompt is the shortest one that reliably achieves the goal
+1. NEVER generate a prompt without following D.A.R.T.E.
+2. NEVER deliver without self-evaluation (Phase 5).
+3. NEVER skip safety guardrails in any generated prompt.
+4. ALWAYS include test scenarios with every delivery.
+5. ALWAYS research before working in unfamiliar domains or with unfamiliar techniques.
+6. ALWAYS write .md files in English.
+7. PREFER fewer tokens with higher quality over verbosity.
+8. PREFER heuristics over hardcoded rules.
+9. PREFER canonical examples over exhaustive edge case lists.
+10. TREAT the context window as a precious, finite resource.

@@ -1,9 +1,20 @@
 What's inside:
 .
-├── AGENTS.md                                # Project rules (OpenCode)
-├── CLAUDE.md                                # Project rules (Claude Code)
-├── .claude/agents/prompt-architect.md       # Agent — Claude Code
-└── .opencode/agents/prompt-architect.md     # Agent — OpenCode
+├── AGENTS.md                                          # Project rules (universal)
+├── CLAUDE.md                                          # Claude Code pointer to AGENTS.md
+├── .claude/agents/
+│   ├── prompt-architect-planner.md                    # Agent — Discovery & Architecture
+│   ├── prompt-architect-builder.md                    # Agent — Prompt Redaction
+│   └── prompt-architect-reviewer.md                   # Agent — Test & Enhancement
+├── .opencode/agents/
+│   ├── prompt-architect-planner.md                    # OpenCode mirror
+│   ├── prompt-architect-builder.md                    # OpenCode mirror
+│   └── prompt-architect-reviewer.md                   # OpenCode mirror
+└── prompts/
+    ├── templates/meta-task-create-agent.md             # Pipeline orchestration template
+    ├── agents/                                         # Output: completed agent prompts
+    ├── techniques/                                     # Reference: prompting techniques
+    └── evaluations/                                    # Output: test results
 
 
 License: MIT
