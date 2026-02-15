@@ -20,7 +20,7 @@ Switch to the `prompt-architect-planner` agent and provide your initial requirem
 
 **When to proceed**: When the Planner delivers the architecture spec AND you have reviewed and approved it. Do not skip to Step 2 with an incomplete spec.
 
-**Save the output to**: `prompts/agents/[agent-name]/architecture-spec.md`
+**Save the output to**: `agents/[agent-name]/architecture-spec.md`
 
 ---
 
@@ -34,7 +34,7 @@ Switch to the `prompt-architect-builder` agent and provide the architecture spec
 
 **When to proceed**: When the Builder delivers the system prompt AND you have done an initial read-through. You do not need to approve it — that is the Reviewer's job.
 
-**Save the output to**: `prompts/agents/[agent-name]/system-prompt.md`
+**Save the output to**: `agents/[agent-name]/system-prompt.md`
 
 ---
 
@@ -53,8 +53,8 @@ Switch to the `prompt-architect-reviewer` agent and provide the system prompt fr
 - **REJECT**: Review the rejection reasons. If the issues are architectural, go back to the Planner (Step 1). If the issues are in the writing, go back to the Builder (Step 2).
 
 **Save the output to**:
-- `prompts/agents/[agent-name]/test-scenarios.md`
-- `prompts/agents/[agent-name]/evaluation.md`
+- `agents/[agent-name]/test-scenarios.md`
+- `agents/[agent-name]/evaluation.md`
 
 ---
 
@@ -78,11 +78,11 @@ For small changes to existing, approved prompts:
 
 Before considering an agent complete, verify:
 
-- [ ] Architecture spec saved to `prompts/agents/[name]/architecture-spec.md`
-- [ ] System prompt saved to `prompts/agents/[name]/system-prompt.md`
-- [ ] Test scenarios saved to `prompts/agents/[name]/test-scenarios.md`
-- [ ] Evaluation saved to `prompts/agents/[name]/evaluation.md`
-- [ ] Agent file saved to `.claude/agents/[name].md` (for Claude Code)
-- [ ] Agent file saved to `.opencode/agents/[name].md` (for OpenCode)
+- [ ] Architecture spec saved to `agents/[name]/architecture-spec.md`
+- [ ] System prompt saved to `agents/[name]/system-prompt.md`
+- [ ] Test scenarios saved to `agents/[name]/test-scenarios.md`
+- [ ] Evaluation saved to `agents/[name]/evaluation.md`
+- [ ] Agent file copied to `.claude/agents/[name].md` (for Claude Code)
+- [ ] Agent file copied to `.opencode/agents/[name].md` (for OpenCode)
 - [ ] All files written in English
 - [ ] Prompt version number assigned (v1.0 for first version)

@@ -51,7 +51,7 @@ Invoke the `prompt-architect-planner` agent (run `/prompt-architect-planner` or 
 
 **When to proceed**: When the Planner delivers the skill architecture spec AND you have reviewed and approved it. Do not skip to Step 2 with an incomplete spec.
 
-**Save the output to**: `prompts/skills/[skill-name]/skill-architecture-spec.md`
+**Save the output to**: `skills/[skill-name]/skill-architecture-spec.md`
 
 ---
 
@@ -70,9 +70,14 @@ Invoke the `prompt-architect-builder` agent and provide the skill architecture s
 **When to proceed**: When the Builder delivers the complete SKILL.md and you have done an initial read-through. You do not need to approve it — that is the Reviewer's job.
 
 **Save the output to**:
-- `.claude/skills/[skill-name]/SKILL.md` (Claude Code version)
-- `.opencode/skills/[skill-name]/SKILL.md` (OpenCode version, if different)
-- Any supporting files to their respective directories
+- `skills/[skill-name]/SKILL.md` (Primary source)
+- `skills/[skill-name]/references/` (if applicable)
+- `skills/[skill-name]/scripts/` (if applicable)
+- `skills/[skill-name]/assets/` (if applicable)
+
+**Deployment**:
+- Copy to `.claude/skills/[skill-name]/` (for Claude Code)
+- Copy to `.opencode/skills/[skill-name]/` (for OpenCode)
 
 ---
 
@@ -95,8 +100,8 @@ Invoke the `prompt-architect-reviewer` agent and provide the SKILL.md from Step 
 - **REJECT**: Review the rejection reasons. If the issues are architectural, go back to the Planner (Step 1). If the issues are in the writing, go back to the Builder (Step 2).
 
 **Save the output to**:
-- `prompts/skills/[skill-name]/test-scenarios.md`
-- `prompts/skills/[skill-name]/evaluation.md`
+- `skills/[skill-name]/test-scenarios.md`
+- `skills/[skill-name]/evaluation.md`
 
 ---
 
@@ -121,33 +126,34 @@ For small changes to existing, approved skills:
 When complete, a skill has the following structure:
 
 ```
-.claude/skills/[skill-name]/
-├── SKILL.md           # Required — main instructions
-├── references/        # Optional — additional documentation
-├── scripts/           # Optional — executable code
-└── assets/            # Optional — templates, images, data files
-
-.opencode/skills/[skill-name]/
-├── SKILL.md           # Required — main instructions (may differ in frontmatter)
-├── references/        # Optional — additional documentation
-├── scripts/           # Optional — executable code
-└── assets/            # Optional — templates, images, data files
-
-prompts/skills/[skill-name]/
+skills/[skill-name]/
 ├── skill-architecture-spec.md    # From Planner
+├── SKILL.md                      # From Builder (Primary Source)
 ├── test-scenarios.md             # From Reviewer
-└── evaluation.md                 # From Reviewer
+├── evaluation.md                 # From Reviewer
+├── references/                   # Optional — additional documentation
+├── scripts/                      # Optional — executable code
+└── assets/                       # Optional — templates, images, data files
+
+.claude/skills/[skill-name]/      # DEPLOYMENT ONLY
+├── SKILL.md
+└── ...
+
+.opencode/skills/[skill-name]/    # DEPLOYMENT ONLY
+├── SKILL.md
+└── ...
 ```
 
 ## Final Checklist
 
 Before considering a skill complete, verify:
 
-- [ ] Skill architecture spec saved to `prompts/skills/[name]/skill-architecture-spec.md`
-- [ ] SKILL.md saved to `.claude/skills/[name]/SKILL.md`
-- [ ] SKILL.md saved to `.opencode/skills/[name]/SKILL.md` (if targeting OpenCode)
-- [ ] Test scenarios saved to `prompts/skills/[name]/test-scenarios.md`
-- [ ] Evaluation saved to `prompts/skills/[name]/evaluation.md`
+- [ ] Skill architecture spec saved to `skills/[name]/skill-architecture-spec.md`
+- [ ] SKILL.md saved to `skills/[name]/SKILL.md`
+- [ ] Test scenarios saved to `skills/[name]/test-scenarios.md`
+- [ ] Evaluation saved to `skills/[name]/evaluation.md`
+- [ ] SKILL.md copied to `.claude/skills/[name]/SKILL.md` (Deployment)
+- [ ] SKILL.md copied to `.opencode/skills/[name]/SKILL.md` (Deployment)
 - [ ] All files written in English
 - [ ] Skill version number assigned (v1.0 for first version; increment minor for updates, major for breaking changes)
 - [ ] Name validated: `^[a-z0-9]+(-[a-z0-9]+)*$`, max 64 chars

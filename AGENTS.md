@@ -39,7 +39,7 @@ This workspace uses three specialized agents that form a pipeline:
 | `prompt-architect-builder` | Redaction | Takes the architecture spec and writes the complete system prompt |
 | `prompt-architect-reviewer` | Test + Enhance | Reviews prompts, creates test scenarios, runs self-evaluation, suggests improvements |
 
-Use the **meta-task template** (`prompts/templates/meta-task-create-agent.md`) to orchestrate the full pipeline for creating a new agent.
+Use the **meta-task template** (`meta-tasks/meta-task-create-agent.md`) to orchestrate the full pipeline for creating a new agent.
 
 For simple refinements or quick edits to existing prompts, use the builder directly. For full new agent creation, always run the complete pipeline: Planner -> Builder -> Reviewer.
 
@@ -100,15 +100,21 @@ LLM research is expensive in tokens and time. Re-researching the same topic acro
 knowledge/
   INDEX.md                   # Research index with freshness tracking
   research/                  # Individual research findings
-prompts/
-  agents/
-    [agent-name]/
-      system-prompt.md       # The system prompt (versioned: v1.0, v1.1)
-      test-scenarios.md      # 4+ test cases
-      evaluation.md          # Performance metrics and results
-  templates/                 # Reusable templates and meta-tasks
   techniques/                # Reference docs on prompting techniques
-  evaluations/               # Aggregated test results and benchmarks
+agents/
+  [agent-name]/
+    architecture-spec.md     # Phase 1 & 2 output
+    system-prompt.md         # Phase 3 output (versioned)
+    test-scenarios.md        # Phase 4 output
+    evaluation.md            # Phase 5 output
+skills/
+  [skill-name]/
+    skill-spec.md            # Phase 1 & 2 output
+    SKILL.md                 # Phase 3 output
+meta-tasks/                  # Reusable orchestration prompts
+tasks/                       # Runtime scratchpad (git-ignored)
+.claude/                     # Deployment target for Claude Code (DO NOT EDIT DIRECTLY)
+.opencode/                   # Deployment target for OpenCode (DO NOT EDIT DIRECTLY)
 ```
 
 ## Delivery Format
@@ -137,8 +143,10 @@ All prompt deliverables include:
 - Semantic versioning for prompts: `v1.0`, `v1.1`, `v2.0`
 - File names in kebab-case: `legal-analyst-agent.md`
 - Annotations and internal comments use `<!-- HTML comments -->`
-- Agent files live in `.claude/agents/` (for Claude Code) and `.opencode/agents/` (for OpenCode)
-- Prompt output files live in `prompts/agents/[name]/`
+- **Workspace**: All work happens in `agents/` and `skills/`.
+- **Deployment**: Only completed, tested artifacts are copied to `.claude/` and `.opencode/`.
+- **Scratchpad**: Use `tasks/` for temporary files. This folder is git-ignored.
+- **Orchestration**: Use `meta-tasks/` for pipeline instructions.
 
 ## Inviolable Rules
 
@@ -152,3 +160,4 @@ All prompt deliverables include:
 8. PREFER heuristics over hardcoded rules.
 9. PREFER canonical examples over exhaustive edge case lists.
 10. TREAT the context window as a precious, finite resource.
+11. NEVER edit `.claude` or `.opencode` directly. Always edit in `agents/` or `skills/` first.
