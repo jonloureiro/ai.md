@@ -42,7 +42,7 @@ This workspace uses an orchestrator and three specialized pipeline agents:
 
 **Default Agent Selection**: If no specific agent is selected for a task, always use `@"prompt-architect (agent)"` as the default orchestrator. It will delegate to the pipeline agents when the task requires it.
 
-For full new agent creation, use the **meta-task template** (`meta-tasks/meta-task-create-agent.md`) or let the orchestrator manage the pipeline.
+For full new agent creation, use the **`/agent-creator`** skill or let the orchestrator manage the pipeline.
 
 ## Workflow: D.A.R.T.E. Framework
 
@@ -112,10 +112,21 @@ skills/
   [skill-name]/
     skill-spec.md            # Phase 1 & 2 output
     SKILL.md                 # Phase 3 output
-meta-tasks/                  # Reusable orchestration prompts
 .claude/                     # Deployment target for Claude Code (DO NOT EDIT DIRECTLY)
 .opencode/                   # Deployment target for OpenCode (DO NOT EDIT DIRECTLY)
 ```
+
+## Skills
+
+This workspace provides skills for creating agents and skills:
+
+| Skill | Purpose |
+|---|---|
+| `/agent-creator` | Orchestrate the D.A.R.T.E. pipeline to create a new agent from concept to approved system prompt |
+| `/skill-creator-darte` | Orchestrate the D.A.R.T.E. pipeline to create a new skill. Integrates with external `/skill-creator` for detailed implementation guidance |
+
+**External Skills** (managed separately):
+- `/skill-creator` — External skill for detailed skill implementation guidance (anatomy, progressive disclosure, packaging)
 
 ## Delivery Format
 
@@ -145,7 +156,7 @@ All prompt deliverables include:
 - Annotations and internal comments use `<!-- HTML comments -->`
 - **Workspace**: All work happens in `agents/` and `skills/`.
 - **Deployment**: Only completed, tested artifacts are copied to `.claude/` and `.opencode/`.
-- **Orchestration**: Use `meta-tasks/` for pipeline instructions.
+- **Orchestration**: Use `/agent-creator` or `/skill-creator` skills for pipeline instructions.
 
 ## Inviolable Rules
 
@@ -160,5 +171,5 @@ All prompt deliverables include:
 9. PREFER canonical examples over exhaustive edge case lists.
 10. TREAT the context window as a precious, finite resource.
 11. NEVER edit `.claude` or `.opencode` directly — except for `prompt-architect` (orchestrator), which is exempt from this rule for quick fixes.
-12. **ALWAYS use the skill** `@.agents/skills/skill-creator/SKILL.md` when working on any skill-related task (creating, updating, or packaging skills).
+12. **ALWAYS use the skill** `/skill-creator-darte` when creating new skills via the D.A.R.T.E. pipeline. For detailed implementation guidance, also invoke the external `/skill-creator`.
 13. **PREFER teammate mode (swarming)** for complex, multi-step tasks that benefit from parallel execution or specialization. Use Task tool with `team_name` to spawn coordinated agents when appropriate.
