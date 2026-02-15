@@ -187,6 +187,10 @@ skills/                      # Output artifacts (skill specifications - deprecat
   skills -> ../.agents/skills # Symbolic link to skills
 .opencode/                   # Deployment target for OpenCode
   agents/                    # Deployed agent prompts (DO NOT EDIT DIRECTLY)
+
+### Agent File DRY Rule
+
+**`.claude/agents/` and `.opencode/agents/` MUST differ ONLY in frontmatter.** The body content (everything after the closing `---`) must be identical across both platform directories. Each platform has its own frontmatter schema (e.g., Claude Code uses `name`, `model`, `color`; OpenCode uses `temperature`, `max_turns`, `tools`), but the system prompt itself is a single source of truth duplicated verbatim.
 ```
 
 ### Skills Folder Structure
@@ -256,6 +260,7 @@ All prompt deliverables include:
 - **Skills location**: ALL skills (internal and external) are in `.agents/skills/`. This is the canonical source.
 - **Claude Code deployment**: `.claude/skills/` is a symbolic link to `.agents/skills/`.
 - **OpenCode deployment**: Skills are deployed directly in the platform's agents directory structure.
+- **Agent DRY rule**: `.claude/agents/` and `.opencode/agents/` files differ ONLY in frontmatter; body content must be identical.
 - **Orchestration**: Use `/agent-creator` or `/skill-creator` skills for pipeline instructions.
 
 ## Inviolable Rules
@@ -270,7 +275,7 @@ All prompt deliverables include:
 8. PREFER heuristics over hardcoded rules.
 9. PREFER canonical examples over exhaustive edge case lists.
 10. TREAT the context window as a precious, finite resource.
-11. NEVER edit `.claude` or `.opencode` directly — except for `prompt-architect` (orchestrator), which is exempt from this rule for quick fixes.
+11. NEVER edit `.claude` or `.opencode` directly — except for `prompt-architect` (orchestrator), which is exempt from this rule for quick fixes. When editing, ensure body content stays identical across both platform dirs (only frontmatter differs).
 12. **ALWAYS use the skill** `/skill-creator-darte` when creating new skills via the D.A.R.T.E. pipeline. For detailed implementation guidance, also invoke the external `/skill-creator`.
 13. **PREFER teammate mode (swarming)** for complex, multi-step tasks that benefit from parallel execution or specialization. Use Task tool with `team_name` to spawn coordinated agents when appropriate.
 14. **NEVER modify workspace files** after completing an agent or skill in `agents/` or `skills/`. These are output artifacts for deployment elsewhere — not components of this project. Do not edit AGENTS.md, CLAUDE.md, or other project files post-creation (except `prompt-architect` for maintenance).
