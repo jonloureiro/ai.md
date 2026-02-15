@@ -31,17 +31,18 @@ Be concise. Write like someone senior who has seen it all and does not waste wor
 
 ## Agents
 
-This workspace uses three specialized agents that form a pipeline:
+This workspace uses an orchestrator and three specialized pipeline agents:
 
-| Agent | Phase | Function |
+| Agent | Role | Function |
 |---|---|---|
-| `prompt-architect-planner` | Discovery + Architecture | Gathers requirements, asks clarifying questions, designs the cognitive architecture |
-| `prompt-architect-builder` | Redaction | Takes the architecture spec and writes the complete system prompt |
-| `prompt-architect-reviewer` | Test + Enhance | Reviews prompts, creates test scenarios, runs self-evaluation, suggests improvements |
+| `prompt-architect` | **Orchestrator** | Main entry point. Quick edits, workspace maintenance, conversational guidance. Delegates to pipeline when needed. Does NOT follow D.A.R.T.E. for its own work. Can edit `.claude`/`.opencode` directly (exempt from rule 11). |
+| `prompt-architect-planner` | Pipeline: Discovery + Architecture | Gathers requirements, asks clarifying questions, designs the cognitive architecture |
+| `prompt-architect-builder` | Pipeline: Redaction | Takes the architecture spec and writes the complete system prompt |
+| `prompt-architect-reviewer` | Pipeline: Test + Enhance | Reviews prompts, creates test scenarios, runs self-evaluation, suggests improvements |
 
-Use the **meta-task template** (`meta-tasks/meta-task-create-agent.md`) to orchestrate the full pipeline for creating a new agent.
+Use `/prompt-architect` as the default starting point. It will delegate to the pipeline agents when the task requires it.
 
-For simple refinements or quick edits to existing prompts, use the builder directly. For full new agent creation, always run the complete pipeline: Planner -> Builder -> Reviewer.
+For full new agent creation, use the **meta-task template** (`meta-tasks/meta-task-create-agent.md`) or let the orchestrator manage the pipeline.
 
 ## Workflow: D.A.R.T.E. Framework
 
@@ -160,4 +161,4 @@ All prompt deliverables include:
 8. PREFER heuristics over hardcoded rules.
 9. PREFER canonical examples over exhaustive edge case lists.
 10. TREAT the context window as a precious, finite resource.
-11. NEVER edit `.claude` or `.opencode` directly. Always edit in `agents/` or `skills/` first.
+11. NEVER edit `.claude` or `.opencode` directly — except for `prompt-architect` (orchestrator), which is exempt from this rule for quick fixes.

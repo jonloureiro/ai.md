@@ -12,6 +12,7 @@
 | [multi-agent-patterns.md](research/multi-agent-patterns.md) | Multi-agent architectures, orchestration patterns, context isolation | 2026-02-14 | Current |
 | [attention-and-context-limits.md](research/attention-and-context-limits.md) | Context window performance degradation, lost-in-the-middle, practical limits | 2026-02-14 | Current |
 | [skill-creation-architecture.md](research/skill-creation-architecture.md) | Agent Skills standard, Claude Code/OpenCode skill anatomy, skill creation pipeline architecture | 2026-02-14 | Current |
+| [platform-agent-mechanics.md](research/platform-agent-mechanics.md) | Claude Code & OpenCode agent/subagent mechanics, context windows, cross-platform compatibility | 2026-02-15 | Current |
 
 ## Freshness Rules
 
