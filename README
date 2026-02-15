@@ -30,20 +30,28 @@ What's inside
   .
   ├── AGENTS.md                                    Universal workspace rules
   ├── CLAUDE.md                                    Claude Code config
+  ├── README                                       This file
+  ├── LICENSE                                      MIT License
   ├── knowledge/
-  │   ├── INDEX.md                                 Research index
+  │   ├── INDEX.md                                 Research index with freshness tracking
   │   └── research/                                Individual research findings
-  ├── .claude/agents/                              Deployment: Claude Code
-  │   ├── prompt-architect.md                      Orchestrator
-  │   ├── prompt-architect-planner.md              Pipeline: Discovery & Architecture
-  │   ├── prompt-architect-builder.md              Pipeline: Redaction
-  │   └── prompt-architect-reviewer.md             Pipeline: Test & Enhance
-  ├── .opencode/agents/                            Deployment: OpenCode
-  │   └── (mirrors .claude/agents/)
-  ├── meta-tasks/                                  Orchestration templates
-  │   ├── meta-task-create-agent.md
-  │   └── meta-task-create-skill.md
-  └── .agents/skills/                              Skill source (symlinked to deployments)
+  ├── .claude/                                     Deployment: Claude Code
+  │   ├── agents/                                  Platform-specific agent prompts
+  │   │   ├── prompt-architect.md                  Orchestrator
+  │   │   ├── prompt-architect-planner.md          Pipeline: Discovery & Architecture
+  │   │   ├── prompt-architect-builder.md          Pipeline: Redaction
+  │   │   └── prompt-architect-reviewer.md         Pipeline: Test & Enhance
+  │   └── skills -> ../.agents/skills              Symbolic link to all skills
+  ├── .opencode/                                   Deployment: OpenCode
+  │   └── agents/                                  Platform-specific agent prompts
+  ├── .agents/                                     ALL skills (canonical location)
+  │   └── skills/
+  │       ├── agent-creator/                       D.A.R.T.E. pipeline orchestration for agents
+  │       ├── skill-creator/                       External skill for detailed implementation guidance
+  │       ├── skill-creator-darte/                 D.A.R.T.E. pipeline orchestration for skills
+  │       └── skillsmp-search/                     SkillsMP marketplace browser
+  ├── agents/                                      Output artifacts (agent specifications)
+  └── skills/                                      Output artifacts (skill specifications - deprecated)
 
 
 License: MIT

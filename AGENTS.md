@@ -101,20 +101,45 @@ LLM research is expensive in tokens and time. Re-researching the same topic acro
 knowledge/
   INDEX.md                   # Research index with freshness tracking
   research/                  # Individual research findings
-  techniques/                # Reference docs on prompting techniques
-agents/
+agents/                      # Output artifacts (agent specifications)
   [agent-name]/
     architecture-spec.md     # Phase 1 & 2 output
     system-prompt.md         # Phase 3 output (versioned)
     test-scenarios.md        # Phase 4 output
     evaluation.md            # Phase 5 output
-skills/
+skills/                      # Output artifacts (skill specifications - deprecated, use .agents/skills/)
   [skill-name]/
     skill-spec.md            # Phase 1 & 2 output
-    SKILL.md                 # Phase 3 output
-.claude/                     # Deployment target for Claude Code (DO NOT EDIT DIRECTLY)
-.opencode/                   # Deployment target for OpenCode (DO NOT EDIT DIRECTLY)
+    evaluation.md            # Test results and metrics
+    test-scenarios.md        # Phase 4 output
+.agents/
+  skills/                    # ALL skills (canonical location)
+    [skill-name]/
+      SKILL.md               # Phase 3 output (deployable skill)
+.claude/                     # Deployment target for Claude Code
+  agents/                    # Deployed agent prompts (DO NOT EDIT DIRECTLY)
+  skills -> ../.agents/skills # Symbolic link to skills
+.opencode/                   # Deployment target for OpenCode
+  agents/                    # Deployed agent prompts (DO NOT EDIT DIRECTLY)
+.agents/
+  skills/                    # ALL skills (canonical location)
+    agent-creator/           # D.A.R.T.E. pipeline orchestration for agents
+    skill-creator/           # External skill for detailed implementation guidance
+    skill-creator-darte/     # D.A.R.T.E. pipeline orchestration for skills
+    skillsmp-search/         # SkillsMP marketplace browser
 ```
+
+### Skills Folder Structure
+
+**ALL skills (internal and external) are located in `.agents/skills/`**. This is the canonical location.
+
+- **`.agents/skills/`** contains:
+  - Internal skills authored in this workspace: `agent-creator/`, `skill-creator-darte/`, `skillsmp-search/`
+  - External skills: `skill-creator/` (from SkillsMP marketplace)
+
+**Symbolic link setup:**
+- **`.claude/skills/`** is a symbolic link to `.agents/skills/` (for Claude Code)
+- **`.opencode/`** does NOT use symbolic links — skills are deployed directly in the platform directory
 
 ### Output Artifact Scope
 
@@ -164,8 +189,10 @@ All prompt deliverables include:
 - Semantic versioning for prompts: `v1.0`, `v1.1`, `v2.0`
 - File names in kebab-case: `legal-analyst-agent.md`
 - Annotations and internal comments use `<!-- HTML comments -->`
-- **Workspace**: All work happens in `agents/` and `skills/`.
-- **Deployment**: Only completed, tested artifacts are copied to `.claude/` and `.opencode/`.
+- **Workspace**: All work happens in `agents/` (specs) and `.agents/skills/` (all skills).
+- **Skills location**: ALL skills (internal and external) are in `.agents/skills/`. This is the canonical source.
+- **Claude Code deployment**: `.claude/skills/` is a symbolic link to `.agents/skills/`.
+- **OpenCode deployment**: Skills are deployed directly in the platform's agents directory structure.
 - **Orchestration**: Use `/agent-creator` or `/skill-creator` skills for pipeline instructions.
 
 ## Inviolable Rules
