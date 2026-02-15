@@ -40,7 +40,7 @@ This workspace uses an orchestrator and three specialized pipeline agents:
 | `prompt-architect-builder` | Pipeline: Redaction | Takes the architecture spec and writes the complete system prompt |
 | `prompt-architect-reviewer` | Pipeline: Test + Enhance | Reviews prompts, creates test scenarios, runs self-evaluation, suggests improvements |
 
-Use `/prompt-architect` as the default starting point. It will delegate to the pipeline agents when the task requires it.
+**Default Agent Selection**: If no specific agent is selected for a task, always use `@"prompt-architect (agent)"` as the default orchestrator. It will delegate to the pipeline agents when the task requires it.
 
 For full new agent creation, use the **meta-task template** (`meta-tasks/meta-task-create-agent.md`) or let the orchestrator manage the pipeline.
 
@@ -160,3 +160,5 @@ All prompt deliverables include:
 9. PREFER canonical examples over exhaustive edge case lists.
 10. TREAT the context window as a precious, finite resource.
 11. NEVER edit `.claude` or `.opencode` directly — except for `prompt-architect` (orchestrator), which is exempt from this rule for quick fixes.
+12. **ALWAYS use the skill** `@.agents/skills/skill-creator/SKILL.md` when working on any skill-related task (creating, updating, or packaging skills).
+13. **PREFER teammate mode (swarming)** for complex, multi-step tasks that benefit from parallel execution or specialization. Use Task tool with `team_name` to spawn coordinated agents when appropriate.
