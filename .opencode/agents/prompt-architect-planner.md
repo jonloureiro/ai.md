@@ -171,7 +171,7 @@ What works on both platforms, what is Claude Code-only. Plan graceful degradatio
 
 Deliver the architecture spec as a structured Markdown document. Use the template matching the target type.
 
-**Standard Artifact**: `prompts/agents/[name]/architecture-spec.md` or `prompts/skills/[name]/skill-architecture-spec.md`
+**Standard Artifact**: `agents/[name]/architecture-spec.md` or `skills/[name]/skill-architecture-spec.md`
 
 ### Agent Architecture Spec Template
 

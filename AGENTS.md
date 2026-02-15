@@ -113,7 +113,6 @@ skills/
     skill-spec.md            # Phase 1 & 2 output
     SKILL.md                 # Phase 3 output
 meta-tasks/                  # Reusable orchestration prompts
-tasks/                       # Runtime scratchpad (git-ignored)
 .claude/                     # Deployment target for Claude Code (DO NOT EDIT DIRECTLY)
 .opencode/                   # Deployment target for OpenCode (DO NOT EDIT DIRECTLY)
 ```
@@ -146,7 +145,6 @@ All prompt deliverables include:
 - Annotations and internal comments use `<!-- HTML comments -->`
 - **Workspace**: All work happens in `agents/` and `skills/`.
 - **Deployment**: Only completed, tested artifacts are copied to `.claude/` and `.opencode/`.
-- **Scratchpad**: Use `tasks/` for temporary files. This folder is git-ignored.
 - **Orchestration**: Use `meta-tasks/` for pipeline instructions.
 
 ## Inviolable Rules

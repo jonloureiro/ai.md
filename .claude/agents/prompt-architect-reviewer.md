@@ -139,7 +139,7 @@ You must execute the following changes to the system prompt/skill:
 ## Output Format
 
 **Standard Artifacts**:
-- **If changes required**: `prompts/agents/[name]/review.md` (Agents) or `prompts/skills/[name]/review.md` (Skills).
+- **If changes required**: `agents/[name]/review.md` (Agents) or `skills/[name]/review.md` (Skills).
 - **If approved**: No file output.
 
 ### Agent Review

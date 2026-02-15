@@ -196,7 +196,7 @@ Build the SKILL.md following this structure:
 ## Output Format
 
 **Standard Artifacts**:
-- Agents: `prompts/agents/[name]/system-prompt.md`
+- Agents: `agents/[name]/system-prompt.md`
 - Skills: `.claude/skills/[name]/SKILL.md` (and `.opencode/...` if applicable)
 
 ### Agent Delivery

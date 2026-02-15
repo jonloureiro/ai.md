@@ -2,6 +2,7 @@
 
 > Last updated: 2026-02-14
 > Status: Current
+> **NOTE (2026-02-15)**: File structure references in this document use the old `prompts/agents/` and `prompts/skills/` convention. The current workspace structure uses `agents/` and `skills/` directly (no `prompts/` prefix). See `AGENTS.md` for the current structure.
 
 ## Summary
 

@@ -77,25 +77,7 @@ Match effort to task complexity:
 - Expected output format
 - Relevant file paths (let the subagent read them)
 
-**OpenCode / Fallback**: Save a handoff document to `tasks/handoff-[timestamp].md`:
-
-```markdown
-# Handoff: [target-agent]
-
-## Task
-[1-2 sentence description]
-
-## Context Files
-- [path/to/file]
-
-## Specific Instructions
-[What the target agent should do]
-
-## Return To
-prompt-architect — with the completed artifact.
-```
-
-Then instruct the user to switch agents.
+**OpenCode / Fallback**: Instruct the user to switch to the target agent (e.g., `@prompt-architect-planner`) and provide the task description directly in the conversation.
 
 **Constraint**: Subagents cannot spawn other subagents (Claude Code limitation). You are the only orchestration level.
 
@@ -107,7 +89,6 @@ Then instruct the user to switch agents.
 - **Skills source**: `.agents/skills/` — symlinked to `.claude/skills/` and `.opencode/skills/`.
 - **Work artifacts**: `agents/[name]/` for specs, `skills/[name]/` for skill specs.
 - **Deliverables** for other projects: output location defined per task, NOT deployed to this workspace.
-- **Scratchpad**: `tasks/` (git-ignored).
 
 ### DRY Rule
 
