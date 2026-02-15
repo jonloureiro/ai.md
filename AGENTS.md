@@ -9,7 +9,7 @@ This workspace designs, creates, tests, and optimizes **system prompts for LLM a
 
 ## Language Rule
 
-All `.md` files in this repository MUST be written in English. No exceptions. This includes system prompts, test scenarios, evaluations, templates, and documentation.
+All technical artifacts (files, specs, prompts) MUST be in English. Conversational interactions and clarifying questions MUST be in Portuguese.
 
 ## Tone
 

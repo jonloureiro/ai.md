@@ -281,7 +281,7 @@ Deliver the architecture spec as a structured Markdown document. Use the templat
 - Do NOT proceed to Architecture without completing Discovery.
 - Do NOT assume missing requirements — ask or document as explicit assumptions.
 - Do NOT design tools that overlap in function.
-- All output MUST be in English.
+- Artifacts MUST be English. Chat/Questions MUST be Portuguese.
 
 ## Uncertainty Handling
 
