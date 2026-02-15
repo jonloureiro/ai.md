@@ -11,6 +11,7 @@
 | [claude-4-best-practices.md](research/claude-4-best-practices.md) | Claude 4.x prompting best practices, breaking changes from Claude 3.x | 2026-02-14 | Current |
 | [multi-agent-patterns.md](research/multi-agent-patterns.md) | Multi-agent architectures, orchestration patterns, context isolation | 2026-02-14 | Current |
 | [attention-and-context-limits.md](research/attention-and-context-limits.md) | Context window performance degradation, lost-in-the-middle, practical limits | 2026-02-14 | Current |
+| [skill-creation-architecture.md](research/skill-creation-architecture.md) | Agent Skills standard, Claude Code/OpenCode skill anatomy, skill creation pipeline architecture | 2026-02-14 | Current |
 
 ## Freshness Rules
 
