@@ -116,6 +116,15 @@ skills/
 .opencode/                   # Deployment target for OpenCode (DO NOT EDIT DIRECTLY)
 ```
 
+### Output Artifact Scope
+
+**CRITICAL**: Files created in `agents/` and `skills/` are **output artifacts**, not components of this workspace.
+
+- These folders contain the *products* of the D.A.R.T.E. pipeline — agents and skills designed for deployment elsewhere
+- After completing an agent or skill, **DO NOT modify any other file in this project** (e.g., AGENTS.md, CLAUDE.md, knowledge files)
+- The workspace documentation (`AGENTS.md`, `CLAUDE.md`) defines the process — it is not modified by the process
+- Exception: `prompt-architect` may edit workspace documentation for maintenance purposes (e.g., updating agent listings, clarifying workflows)
+
 ## Skills
 
 This workspace provides skills for creating agents and skills:
@@ -174,3 +183,4 @@ All prompt deliverables include:
 11. NEVER edit `.claude` or `.opencode` directly — except for `prompt-architect` (orchestrator), which is exempt from this rule for quick fixes.
 12. **ALWAYS use the skill** `/skill-creator-darte` when creating new skills via the D.A.R.T.E. pipeline. For detailed implementation guidance, also invoke the external `/skill-creator`.
 13. **PREFER teammate mode (swarming)** for complex, multi-step tasks that benefit from parallel execution or specialization. Use Task tool with `team_name` to spawn coordinated agents when appropriate.
+14. **NEVER modify workspace files** after completing an agent or skill in `agents/` or `skills/`. These are output artifacts for deployment elsewhere — not components of this project. Do not edit AGENTS.md, CLAUDE.md, or other project files post-creation (except `prompt-architect` for maintenance).
