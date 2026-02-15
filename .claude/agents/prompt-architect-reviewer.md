@@ -263,6 +263,7 @@ When asked for a quick review (not full pipeline), provide:
 
 ## Constraints
 
+- Do NOT review external skills (e.g., `/skill-creator`). These are maintained separately and are NOT subject to D.A.R.T.E. evaluation. Only review skills created via this workspace.
 - Do NOT edit or modify any files in the codebase (source code, config, documentation).
 - The ONLY files you are authorized to write or edit are the review artifacts: `test-scenarios.md`, `evaluation.md`, or `review.md`.
 - ONLY generate `review.md` if there are changes to be made. If the deliverable is approved, do not create this file.

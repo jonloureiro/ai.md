@@ -29,6 +29,8 @@ Be concise. Write like someone senior who has seen it all and does not waste wor
 
 6. **Minimal viable context.** More context does not mean better context. Research shows model performance degrades around 32K tokens even with million-token windows due to attention scarcity and the "lost-in-the-middle" phenomenon. Curate aggressively.
 
+7. **Dual-mode communication.** Concise by default, deep analysis on explicit trigger. Most tasks need directness; some require exhaustive reasoning. Use triggers to enable depth without sacrificing efficiency.
+
 ## Agents
 
 This workspace uses an orchestrator and three specialized pipeline agents:
@@ -121,12 +123,6 @@ skills/                      # Output artifacts (skill specifications - deprecat
   skills -> ../.agents/skills # Symbolic link to skills
 .opencode/                   # Deployment target for OpenCode
   agents/                    # Deployed agent prompts (DO NOT EDIT DIRECTLY)
-.agents/
-  skills/                    # ALL skills (canonical location)
-    agent-creator/           # D.A.R.T.E. pipeline orchestration for agents
-    skill-creator/           # External skill for detailed implementation guidance
-    skill-creator-darte/     # D.A.R.T.E. pipeline orchestration for skills
-    skillsmp-search/         # SkillsMP marketplace browser
 ```
 
 ### Skills Folder Structure
@@ -152,7 +148,7 @@ skills/                      # Output artifacts (skill specifications - deprecat
 
 ## Skills
 
-This workspace provides skills for creating agents and skills:
+### Internal Skills (Created via D.A.R.T.E. — subject to review)
 
 | Skill | Purpose |
 |---|---|
@@ -160,8 +156,11 @@ This workspace provides skills for creating agents and skills:
 | `/agent-creator` | Orchestrate the D.A.R.T.E. pipeline to create a new agent from concept to approved system prompt |
 | `/skill-creator-darte` | Orchestrate the D.A.R.T.E. pipeline to create a new skill. Integrates with external `/skill-creator` for detailed implementation guidance. **Always run `/skillsmp-search` first to check for existing skills.** |
 
-**External Skills** (managed separately):
-- `/skill-creator` — External skill for detailed skill implementation guidance (anatomy, progressive disclosure, packaging)
+### External Skills (NOT subject to workspace review)
+
+| Skill | Location | Maintainer | Purpose |
+|---|---|---|---|
+| `/skill-creator` | `.agents/skills/skill-creator/` (symlinked to deployment dirs) | External | Detailed skill implementation guidance: anatomy, progressive disclosure, packaging reference |
 
 ## Delivery Format
 
@@ -211,3 +210,4 @@ All prompt deliverables include:
 12. **ALWAYS use the skill** `/skill-creator-darte` when creating new skills via the D.A.R.T.E. pipeline. For detailed implementation guidance, also invoke the external `/skill-creator`.
 13. **PREFER teammate mode (swarming)** for complex, multi-step tasks that benefit from parallel execution or specialization. Use Task tool with `team_name` to spawn coordinated agents when appropriate.
 14. **NEVER modify workspace files** after completing an agent or skill in `agents/` or `skills/`. These are output artifacts for deployment elsewhere — not components of this project. Do not edit AGENTS.md, CLAUDE.md, or other project files post-creation (except `prompt-architect` for maintenance).
+15. **NEVER review external skills.** The workspace reviews only its own deliverables. External skills (e.g., `/skill-creator`) are maintained separately and are NOT subject to D.A.R.T.E. evaluation.
