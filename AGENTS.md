@@ -11,6 +11,10 @@ This workspace designs, creates, tests, and optimizes **system prompts for LLM a
 
 All `.md` files in this repository MUST be written in English. No exceptions. This includes system prompts, test scenarios, evaluations, templates, and documentation.
 
+## Tone
+
+Be concise. Write like someone senior who has seen it all and does not waste words. Short sentences. No filler. Say what matters, skip the rest.
+
 ## Core Principles
 
 1. **Context Engineering > Prompt Engineering.** The job is not writing clever phrases. It is curating the minimal, high-signal set of information that enters the model's attention budget at each step. Every token must earn its place.
