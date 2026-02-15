@@ -122,8 +122,9 @@ This workspace provides skills for creating agents and skills:
 
 | Skill | Purpose |
 |---|---|
+| `/skillsmp-search` | Browse and discover agent skills from the SkillsMP marketplace (skillsmp.com). Access 117K+ open-source agent skills sorted by popularity or recency. **Use before creating new skills to avoid duplication.** |
 | `/agent-creator` | Orchestrate the D.A.R.T.E. pipeline to create a new agent from concept to approved system prompt |
-| `/skill-creator-darte` | Orchestrate the D.A.R.T.E. pipeline to create a new skill. Integrates with external `/skill-creator` for detailed implementation guidance |
+| `/skill-creator-darte` | Orchestrate the D.A.R.T.E. pipeline to create a new skill. Integrates with external `/skill-creator` for detailed implementation guidance. **Always run `/skillsmp-search` first to check for existing skills.** |
 
 **External Skills** (managed separately):
 - `/skill-creator` — External skill for detailed skill implementation guidance (anatomy, progressive disclosure, packaging)

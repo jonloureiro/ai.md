@@ -30,6 +30,35 @@ Before starting, ensure you can answer:
 - Is it user-invocable (`/skill-name`) or agent-invocable (auto-loaded)?
 - Does it need arguments?
 
+## Step 0: Discovery (Reference SkillsMP)
+
+**Before creating a new skill, search SkillsMP for similar skills to use as reference.**
+
+Invoke `/skillsmp-search` to browse the SkillsMP marketplace:
+
+- `/skillsmp-search recent` — Browse recently updated skills
+- `/skillsmp-search popular` or `/skillsmp-search stars` — Browse by GitHub stars
+- Visit https://skillsmp.com for keyword/semantic search
+
+**What to look for**:
+- Similar skills that address related problems
+- Structure and organization patterns
+- Progressive disclosure approaches
+- Argument and frontmatter design choices
+- Best practices and conventions
+
+**How to use findings**:
+- Study similar skills as **reference implementations** — learn from their structure, patterns, and choices
+- Identify proven patterns that you can adapt to your use case
+- Note what works well and what could be improved
+- Then proceed with D.A.R.T.E. to create your original skill
+
+**Important**: SkillsMP is for learning and reference, NOT for direct reuse or extension. Always create your own skill from scratch using the D.A.R.T.E. pipeline. Do not copy-paste or extend existing skills.
+
+**Why this matters**: SkillsMP aggregates 117K+ open-source agent skills. Studying successful skills helps you internalize proven patterns and avoid common pitfalls, while still creating something tailored to your specific needs.
+
+---
+
 ## Step 1: Plan
 
 Invoke `/prompt-architect-planner` with your initial requirements.
@@ -180,6 +209,7 @@ If your skill uses these features and targets OpenCode:
 
 Before considering a skill complete, verify:
 
+- [ ] Searched SkillsMP (`/skillsmp-search` or https://skillsmp.com) for reference skills to study patterns and best practices
 - [ ] Skill architecture spec saved to `skills/[name]/skill-architecture-spec.md`
 - [ ] SKILL.md saved to `skills/[name]/SKILL.md`
 - [ ] Test scenarios saved to `skills/[name]/test-scenarios.md`
