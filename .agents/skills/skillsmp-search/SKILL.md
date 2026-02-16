@@ -5,121 +5,64 @@ description: Browse and discover agent skills from the SkillsMP marketplace (ski
 
 # SkillsMP Search
 
-Browse the SkillsMP marketplace to discover open-source agent skills. SkillsMP aggregates 117,000+ skills from GitHub that use the SKILL.md standard.
+Browse public skills from SkillsMP (`skillsmp.com`).
 
-**Note**: The SkillsMP search API requires authentication. This skill supports browsing skills by recency and popularity. For keyword/AI search, visit https://skillsmp.com directly.
+## Use When
 
-## When to Use
+- User wants to discover skills
+- User asks for "skills marketplace" / "SkillsMP"
+- You need references before creating a new skill
 
-Use this skill when:
-- User asks to find, search, or browse skills
-- User wants to discover new agent capabilities
-- User mentions "skills marketplace" or "SkillsMP"
-- User needs a skill for a specific task or domain
+## Supported Commands
 
-## How to Browse
-
-### Browse Recent Skills
-```
+```text
 /skillsmp-search
 /skillsmp-search recent
-```
-Returns the most recently updated skills.
-
-### Browse Popular Skills
-```
 /skillsmp-search popular
 /skillsmp-search stars
 ```
-Returns skills sorted by GitHub stars.
+
+- `recent`: latest updates
+- `popular` / `stars`: ranked by GitHub stars
+
+For keyword/semantic search, send users to https://skillsmp.com.
+
+## Data Fetch
+
+Use `curl` via Execute:
+
+```bash
+curl -s "https://skillsmp.com/api/skills?page=1&limit=10&sortBy=recent"
+curl -s "https://skillsmp.com/api/skills?page=1&limit=10&sortBy=stars"
+```
 
 ## Output Format
-
-Present results in this structure:
 
 ```markdown
 ## SkillsMP Results
 
-**Query**: {search_term or "Recent Skills"}
-**Found**: {total_count} skills
+**Query**: {Recent|Popular}
+**Found**: {count}
 **Page**: {page}/{total_pages}
 
 ### {skill_name}
-**Author**: [@{author}]({author_avatar_url})
-**Description**: {skill_description}
-**Stats**: {stars} | {forks} forks
-**Source**: [View on GitHub]({github_url})
+**Author**: {author}
+**Description**: {description}
+**Stats**: {stars} stars | {forks} forks
+**Source**: {github_url}
 **Updated**: {relative_time}
-
-### {skill_name}
-...
 ```
 
-## API Interaction
-
-Use the Execute tool with curl to fetch data:
-
-**Browse recent skills**:
-```bash
-curl -s "https://skillsmp.com/api/skills?page=1&limit=10&sortBy=recent"
-```
-
-**Browse popular skills**:
-```bash
-curl -s "https://skillsmp.com/api/skills?page=1&limit=10&sortBy=stars"
-```
-
-**Search on website** (for keyword/semantic search):
-Direct the user to https://skillsmp.com for advanced search capabilities.
-
-## Pagination
-
-If results show `hasNext: true` or `totalPages > 1`, indicate pagination:
-- "Showing page X of Y (use specific page number for more results)"
-- Users can request specific pages: `/skillsmp-search "query" --page=2`
+Default to top 10 results.
 
 ## Error Handling
 
-- **Cloudflare challenge**: API may return Cloudflare HTML instead of JSON
-  - Response: "API is protected. Visit https://skillsmp.com to browse skills directly."
-- **Empty results**: "No skills found. Try browsing popular skills or visit the marketplace."
-- **Network errors**: Suggest visiting https://skillsmp.com directly
+- If API returns HTML/Cloudflare challenge: redirect to https://skillsmp.com.
+- If empty results: suggest `popular` browsing.
+- If request fails: explain failure and provide website fallback.
 
-## Examples
+## Response Rules
 
-**Example 1 - Browse recent skills**:
-```
-User: /skillsmp-search
-→ Returns top 10 recent skills with full metadata
-```
-
-**Example 2 - Browse popular skills**:
-```
-User: /skillsmp-search popular
-→ Returns top 10 skills by GitHub stars
-```
-
-**Example 3 - Search request (redirect to website)**:
-```
-User: Find skills for database migrations
-→ Response: "For keyword/AI search, visit https://skillsmp.com
-   You can also browse recent/popular skills with /skillsmp-search"
-```
-
-## Response Guidelines
-
-1. **Limit results**: Show top 10 results by default to avoid overwhelming output
-2. **Highlight relevance**: If the query is specific, note why results match
-3. **Provide context**: Include star counts and update times to assess quality
-4. **Direct action**: Always include GitHub URLs for direct access
-5. **Marketplace link**: End with "Browse more at https://skillsmp.com"
-
-## Notes
-
-- SkillsMP search endpoints require API authentication (Bearer token)
-- Browse endpoints work without authentication but may have Cloudflare protection
-- For full search capabilities, visit https://skillsmp.com directly
-- SkillsMP is an independent community project, not officially affiliated with Anthropic or OpenAI
-- All skills are sourced from public GitHub repositories
-- Skills may have varying quality levels - always review before installing
-- For skill installation instructions, see: https://skillsmp.com/faq
+- Keep output concise and scannable.
+- Include GitHub links for direct action.
+- End with: `Browse more at https://skillsmp.com`.
