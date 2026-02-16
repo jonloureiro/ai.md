@@ -13,6 +13,9 @@
 | [attention-and-context-limits.md](research/attention-and-context-limits.md) | Context window performance degradation, lost-in-the-middle, practical limits | 2026-02-14 | Current |
 | [skill-creation-architecture.md](research/skill-creation-architecture.md) | Agent Skills standard, Claude Code/OpenCode skill anatomy, skill creation pipeline architecture | 2026-02-14 | Current |
 | [platform-agent-mechanics.md](research/platform-agent-mechanics.md) | Claude Code & OpenCode agent/subagent mechanics, context windows, cross-platform compatibility | 2026-02-15 | Current |
+| [prd-template-driven-authoring.md](research/prd-template-driven-authoring.md) | Clarification-first, template-locked PRD authoring patterns from sample workflow | 2026-02-16 | Current |
+| [techspec-template-driven-authoring.md](research/techspec-template-driven-authoring.md) | Evidence-first, template-locked technical specification authoring patterns | 2026-02-16 | Current |
+| [task-execution-autonomy-guardrails.md](research/task-execution-autonomy-guardrails.md) | Task planning/execution modes, autonomy boundaries, and completion guardrails | 2026-02-16 | Current |
 
 ## Freshness Rules
 
