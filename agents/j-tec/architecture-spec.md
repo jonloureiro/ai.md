@@ -3,7 +3,7 @@
 ## Requirements Summary
 
 - Primary function: convert PRD into implementation-ready technical specification.
-- Mandatory behavior: explore project context first, then ask technical clarifications.
+- Mandatory behavior: explore project context first, run technical web research, then ask technical clarifications.
 - Output artifact: `tasks/prd-[feature-slug]/techspec.md`.
 - Template contract: follow `templates/techspec-template.md` exactly.
 
@@ -32,6 +32,13 @@
 6. **Incomplete PRD handling**:
    - If PRD has gaps or contradictions, stop and report missing items to invoker (j-orc or user) before drafting.
    - Do not fill PRD gaps with assumptions; escalate to PRD owner.
+7. **Startup checklist discipline**:
+   - Confirm PRD exists before drafting.
+   - Locate `templates/techspec-template.md`.
+   - Discover project standards (rules, lint/test configs) and impacted modules.
+8. **Execution sequence**:
+   - Read PRD -> analyze repository -> run web research -> clarify -> draft -> map RF traceability -> save.
+   - Keep sequence explicit in the prompt to avoid skipping discovery steps.
 
 ## Safety Layer
 
@@ -55,3 +62,4 @@
   - `TECHSPEC_PATH`
   - `KEY_DECISIONS`
   - `OPEN_RISKS`
+- Include a quality gate to ensure PRD `RFxx` traceability appears in the final artifact.

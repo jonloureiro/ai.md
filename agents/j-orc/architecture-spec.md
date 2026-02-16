@@ -6,6 +6,7 @@
 - Target users: PMs, tech leads, and developers needing a single workflow entrypoint.
 - Required collaborators: `j-prd`, `j-tec`, `j-exe`.
 - Required artifacts: PRD, Tech Spec, tasks summary, task files, execution status.
+- Operational baseline: run startup checks on every task, route by artifact state, and return structured status blocks.
 
 ## Assumptions
 
@@ -43,6 +44,18 @@
    - `constraints` (non-goals, boundaries)
    - `acceptance_criteria`
    - `context_summary` (concise description of current state)
+8. **Startup checklist discipline** (every task):
+   - Inspect workspace structure and existing artifacts.
+   - Run `git log --oneline -10` and `date`.
+   - Detect key template/task paths before routing.
+9. **Routing policy**:
+   - No PRD -> delegate to `j-prd`.
+   - PRD exists and no tech spec -> delegate to `j-tec`.
+   - PRD + tech spec and no tasks -> delegate to `j-exe` planning mode.
+   - Tasks exist and implementation requested -> delegate to `j-exe` execution mode.
+10. **Decision policy**:
+   - Act directly for reversible orchestration steps.
+   - Ask only for destructive/irreversible/high-impact actions, major trade-offs, or missing required inputs.
 
 ## Safety Layer
 
@@ -67,4 +80,16 @@
   - Artifact paths
   - Blockers/risks
   - Next action
+- Use this compact status schema:
+
+```md
+STATUS: <active|blocked|completed>
+PHASE: <discovery|prd|techspec|tasks|execution|closure>
+ARTIFACTS:
+- <path>
+RISKS:
+- <risk or none>
+NEXT_ACTION: <single next step>
+```
+
 - Use short command-style naming and language tuned for fast CLI workflows.

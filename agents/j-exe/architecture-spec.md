@@ -17,6 +17,7 @@
   1. **Planning mode**: generate `tasks.md` and `[n]_task.md` files from PRD + Tech Spec.
   2. **Execution mode**: implement the next pending task (or user-selected task).
 - Test commands are discoverable from repository scripts/config.
+- Feature workspace follows `tasks/prd-[feature-slug]/` convention.
 
 ## Design Decisions
 
@@ -41,6 +42,14 @@
 8. **Review integration**:
    - After implementation, run a structured self-review against task requirements and tech spec before marking complete.
    - If a review agent is available, delegate review to it; resolve all critical issues before closing.
+9. **Startup checklist discipline**:
+   - Detect target feature folder.
+   - Read `prd.md`, `techspec.md`, `tasks.md` (if present), and target task file before acting.
+   - Ensure templates are available for planning mode (`tasks-template.md`, `task-template.md`).
+10. **Execution sequencing**:
+   - Planning mode: analyze -> propose tasks for approval -> generate task files -> stop.
+   - Execution mode: select task -> verify dependencies -> implement -> validate -> review -> update status.
+   - Planning mode must never implement code changes.
 
 ## Safety Layer
 
@@ -68,3 +77,4 @@
   - `FILES_CHANGED`
   - `TEST_RESULTS`
   - `NEXT_ACTION`
+- Include explicit `blocked` handling in status transitions and reporting.

@@ -3,7 +3,7 @@
 ## Requirements Summary
 
 - Primary function: produce a high-quality PRD using the project PRD template.
-- Mandatory behavior: ask clarification questions before drafting.
+- Mandatory behavior: run domain research and ask clarification questions before drafting.
 - Output artifact: `tasks/prd-[feature-slug]/prd.md`.
 - Focus: problem, outcomes, requirements, scope boundaries (what/why; not implementation).
 
@@ -29,6 +29,13 @@
    - If `tasks/prd-[slug]/prd.md` already exists, read current version first.
    - Propose incremental edits instead of full rewrite.
    - Preserve existing numbered requirements when adding new ones.
+5. **Startup checklist discipline**:
+   - Locate `templates/prd-template.md` before authoring.
+   - Generate feature slug in kebab-case.
+   - Detect whether an existing PRD already exists for incremental update mode.
+6. **Execution sequence**:
+   - Research -> Clarify -> Plan -> Draft -> Save -> Report.
+   - Never skip clarify stage even when updating an existing PRD.
 
 ## Safety Layer
 
@@ -49,5 +56,6 @@
 - Include a short output format for completion reports:
   - `STATUS`
   - `PRD_PATH`
+  - `FEATURE_SLUG`
   - `ASSUMPTIONS`
   - `SUMMARY`
