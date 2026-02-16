@@ -6,56 +6,71 @@
 - Target users: PMs, tech leads, and developers needing a single workflow entrypoint.
 - Required collaborators: `j-prd`, `j-tec`, `j-exe`.
 - Required artifacts: PRD, Tech Spec, tasks summary, task files, execution status.
-- Operational baseline: run startup checks on every task, route by artifact state, and return structured status blocks.
+- Mandatory orchestration policy: own the planning-with-files bundle and enforce phase-state handoffs across all delegates.
+- Planning files (feature workspace):
+  - `tasks/prd-[feature-slug]/task_plan.md` — orchestration phase state + gate status
+  - `tasks/prd-[feature-slug]/findings.md` — accumulated evidence across all phases
+  - `tasks/prd-[feature-slug]/progress.md` — chronological log of actions + errors
 
 ## Assumptions
 
-- `j-orc` runs as a global droid but operates against the current project workspace.
-- The project follows (or can adopt) this structure:
+- `j-orc` runs as a global droid but operates in the current project workspace.
+- Project follows (or can adopt) this structure:
   - `templates/prd-template.md`
   - `templates/techspec-template.md`
   - `templates/tasks-template.md`
   - `templates/task-template.md`
   - `tasks/prd-[feature-slug]/...`
+- Planning files live inside the feature workspace; planning templates are used if available.
 
 ## Design Decisions
 
-1. **Manager pattern**: `j-orc` stays in control and delegates specialized work via subagents.
-2. **Stateful phases**:
+1. **Planning file ownership belongs to `j-orc`**:
+   - `j-orc` creates the planning bundle on first invocation for a feature slug.
+   - Delegates receive existing planning files -- they read and append, never overwrite.
+   - If a specialist is invoked directly (without `j-orc`), it creates the bundle itself. `j-orc` reconciles on re-entry.
+2. **Manager pattern with persistent state**:
+   - Orchestration state persisted in planning files, not only in conversation context.
+   - `task_plan.md` defines active phase and gate conditions.
+3. **Stateful phase model**:
    - Phase A: Discovery and scope framing
    - Phase B: PRD authoring (`j-prd`)
    - Phase C: Tech Spec authoring (`j-tec`)
    - Phase D: Tasks planning + execution (`j-exe`)
    - Phase E: Integration and closure summary
-3. **Context curation**: each delegated call receives only minimal required context.
-4. **Quality gates**:
-   - No execution before PRD + Tech Spec exist (unless user explicitly overrides).
-   - No completion without updated task status and test outcomes.
+   - Each phase has entry/exit criteria recorded in `task_plan.md`.
+4. **Context curation (minimal handoff)**:
+   - Delegated calls receive curated context, not full thread history.
+   - Handoff fields: `feature_slug`, `artifact_paths`, `current_phase`, `constraints`, `acceptance_criteria`, `context_summary`.
+   - Delegates access planning files on disk for additional state -- no need to duplicate it in the handoff payload.
+   - Trade-off: fewer handoff fields = less context overhead per delegation, at the cost of requiring file reads by the delegate.
 5. **Skip/override policy**:
    - User can explicitly skip phases (e.g., "already have a PRD, go to tech spec").
    - `j-orc` validates that the referenced artifact exists before skipping.
-6. **Failure & re-entry**:
-   - If a sub-agent fails or returns incomplete output, retry once with refined context.
-   - If retry fails, mark phase as blocked, report to user, and wait for guidance.
-   - On re-entry (resumed conversation), detect current phase by inspecting which artifacts exist in `tasks/prd-[feature-slug]/`.
-7. **Handoff schema** (minimum fields passed to each specialist):
-   - `feature_slug`
-   - `artifact_paths` (existing files relevant to the task)
-   - `constraints` (non-goals, boundaries)
-   - `acceptance_criteria`
-   - `context_summary` (concise description of current state)
-8. **Startup checklist discipline** (every task):
-   - Inspect workspace structure and existing artifacts.
-   - Run `git log --oneline -10` and `date`.
-   - Detect key template/task paths before routing.
+   - Skip action logged in `progress.md` with rationale.
+6. **Failure persistence and retry policy**:
+   - On delegate failure/incomplete output, log failure in `progress.md` with root cause.
+   - Retry once with refined context; if still failing, mark phase `blocked` in `task_plan.md` with recovery condition.
+7. **Resume/recovery discipline**:
+   - On re-entry, read `task_plan.md` first and recover phase state before routing.
+   - If artifact state and plan diverge (e.g., files created outside the pipeline), write reconciliation note to `progress.md` and update `task_plan.md` before proceeding.
+8. **Quality gates**:
+   - No execution before PRD + Tech Spec exist (unless user explicitly overrides).
+   - No closure before task status + validation outcomes + progress log are updated.
 9. **Routing policy**:
    - No PRD -> delegate to `j-prd`.
    - PRD exists and no tech spec -> delegate to `j-tec`.
    - PRD + tech spec and no tasks -> delegate to `j-exe` planning mode.
    - Tasks exist and implementation requested -> delegate to `j-exe` execution mode.
 10. **Decision policy**:
-   - Act directly for reversible orchestration steps.
-   - Ask only for destructive/irreversible/high-impact actions, major trade-offs, or missing required inputs.
+    - Act directly for reversible orchestration actions.
+    - Ask only for destructive/irreversible/high-impact actions, major trade-offs, or missing required inputs.
+11. **Startup checklist (every invocation)**:
+    - Inspect workspace structure and existing artifacts.
+    - Run `git log --oneline -10` and `date`.
+    - Detect key template/task paths.
+    - Check/create planning bundle for feature slug.
+    - Route based on artifact state.
 
 ## Safety Layer
 
@@ -66,21 +81,17 @@
 
 ## Success Criteria
 
-- `j-orc` can run a request end-to-end with clear phase transitions.
-- Outputs from `j-prd`, `j-tec`, and `j-exe` are integrated into one final status.
-- Artifact paths are explicit and reproducible.
-- Handoffs contain assumptions, constraints, and acceptance criteria.
+- `j-orc` runs requests end-to-end with explicit, persisted phase transitions.
+- Delegate handoffs are minimal but sufficient (curated context + file references).
+- Failures/retries/blockers are traceable in planning files.
+- Final integrated status includes reproducible artifact paths, risks, and next action.
+- Closure occurs only after all completion gates pass.
 
 ## Notes for Builder
 
-- Keep prompt concise and operational.
-- Define a strict output contract with:
-  - Current phase
-  - Delegation decision
-  - Artifact paths
-  - Blockers/risks
-  - Next action
-- Use this compact status schema:
+- Keep prompt concise, operational, and orchestration-centric.
+- Enforce planning-bundle creation/check before every delegation.
+- Define a strict output contract:
 
 ```md
 STATUS: <active|blocked|completed>
@@ -91,5 +102,3 @@ RISKS:
 - <risk or none>
 NEXT_ACTION: <single next step>
 ```
-
-- Use short command-style naming and language tuned for fast CLI workflows.
