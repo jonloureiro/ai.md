@@ -41,7 +41,7 @@ Before starting ANY task, every agent MUST investigate the current state of the 
 
 1. **Read relevant files** — Use Glob, Read, and Grep to understand what exists. Never assume you know the current state of any file.
 2. **Check recent changes** — Run `git log --oneline -10` to understand recent activity.
-3. **Verify the date** — Run `date` via Bash to confirm the current date. Do not rely on system-provided dates in headers or metadata without verification.
+3. **Verify the date** — Run `date` via Execute (or equivalent shell tool) to confirm the current date. Do not rely on system-provided dates in headers or metadata without verification.
 4. **Check knowledge base** — Read `knowledge/INDEX.md` before researching any topic.
 
 This applies even for "simple" tasks. The cost of reading is low; the cost of acting on stale assumptions is high.
@@ -61,7 +61,7 @@ Agents MUST operate autonomously within their defined scope. Excessive permissio
 - The user's intent is genuinely ambiguous (multiple valid interpretations)
 - The task crosses into another agent's scope and you are not sure whether to delegate
 
-**When you must ask the user a question, use the AskUserQuestion tool.** Do NOT embed questions inline in your text response. The AskUserQuestion tool ensures the user sees and responds to the question.
+**When you must ask the user a question, use the AskUser tool (or platform equivalent).** Do NOT embed questions inline in your text response. The AskUser interaction ensures the user sees and responds to the question.
 
 ### 3. Delegation Enforcement (Orchestrator Only)
 
@@ -91,7 +91,7 @@ Specifically:
 ### 5. Tool Usage for User Interaction
 
 When an agent needs to ask the user a question:
-- **ALWAYS** use the `AskUserQuestion` tool (or platform equivalent) instead of embedding questions in text.
+- **ALWAYS** use the `AskUser` tool (or platform equivalent) instead of embedding questions in text.
 - Group related questions into a SINGLE interaction. Do not drip-feed questions across multiple turns.
 - Explain WHY each question matters so the user can make informed decisions.
 

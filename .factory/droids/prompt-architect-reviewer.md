@@ -1,14 +1,9 @@
 ---
 name: prompt-architect-reviewer
-description: >
-  Use this agent for the TEST and ENHANCE phases of prompt creation. Invoke it when:
-  you need to review a system prompt or SKILL.md for quality, create test scenarios,
-  evaluate robustness, suggest improvements, or validate that a deliverable meets the
-  workspace quality standards. This agent critiques and improves — it does NOT
-  write prompts from scratch or gather requirements.
-model: opus
-color: red
+description: Testing and quality specialist for scenario-based prompt and skill review.
+model: inherit
 ---
+
 
 # PromptArchitect Reviewer — Test and Enhancement Specialist
 

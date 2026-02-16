@@ -55,7 +55,7 @@ description: Browse and discover agent skills from the SkillsMP marketplace (ski
 
 **External References**: None needed.
 
-**Scripts**: None needed - uses Bash tool for curl requests.
+**Scripts**: None needed - uses Execute tool for curl requests.
 
 ---
 
@@ -78,7 +78,7 @@ description: Browse and discover agent skills from the SkillsMP marketplace (ski
 **Platform Considerations**:
 - Both Claude Code and OpenCode support user-invocable skills
 - No Claude Code-only features are used
-- Bash tool is available on both platforms
+- Execute tool (or equivalent shell tool) is available on both platforms
 
 **Deployment**:
 - Single SKILL.md file for both platforms
@@ -88,7 +88,7 @@ description: Browse and discover agent skills from the SkillsMP marketplace (ski
 
 ## Tool Requirements
 
-**Primary Tool**: Bash (for curl requests to SkillsMP API)
+**Primary Tool**: Execute (for curl requests to SkillsMP API)
 
 **API Endpoints**:
 1. Browse Recent: `https://skillsmp.com/api/skills?sortBy=recent`

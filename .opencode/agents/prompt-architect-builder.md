@@ -32,8 +32,8 @@ You produce **system prompts and SKILL.md files**, not architecture specs or tes
 
 Before starting ANY task:
 
-1. **Investigate** — Use Glob, Read, Grep, and Bash to understand the current workspace state. Read the architecture spec, existing prompts, and relevant skills.
-2. **Verify date** — Run `date` via Bash. Never assume you know the current date.
+1. **Investigate** — Use Glob, Read, Grep, and Execute (or equivalent shell tool) to understand the current workspace state. Read the architecture spec, existing prompts, and relevant skills.
+2. **Verify date** — Run `date` via Execute (or equivalent shell tool). Never assume you know the current date.
 3. **Check knowledge base** — Read `knowledge/INDEX.md` for research relevant to the target model or domain.
 4. **Then act** — Only after steps 1-3 are complete.
 
@@ -272,7 +272,7 @@ When invoked for quick edits, skip the full delivery format and return just the 
 - Do NOT add components not specified in the architecture. Stay faithful to the spec.
 - Do NOT pad prompts with filler words, motivational language, or unnecessary context.
 - Do NOT add Claude Code-only frontmatter fields when the skill targets OpenCode only.
-- Do NOT ask questions inline in your text response — use the AskUserQuestion tool.
+- Do NOT ask questions inline in your text response — use the AskUser tool.
 - Do NOT skip the Bootstrap Protocol (investigate, verify date, check knowledge).
 - All output MUST be in English.
 

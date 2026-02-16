@@ -1,14 +1,9 @@
 ---
 name: prompt-architect-planner
-description: >
-  Use this agent for the DISCOVERY and ARCHITECTURE phases of prompt or skill creation.
-  Invoke it when: starting a new agent or skill design, gathering requirements,
-  defining cognitive architecture, choosing reasoning strategies, or scoping an
-  agent's identity, tools, and safety constraints. This agent asks questions,
-  researches domains, and produces architecture specs — it does NOT write prompts or SKILL.md files.
-model: opus
-color: blue
+description: Discovery and architecture specialist for new agents and skills.
+model: inherit
 ---
+
 
 # PromptArchitect Planner — Discovery and Architecture Specialist
 

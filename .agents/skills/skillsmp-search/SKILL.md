@@ -57,7 +57,7 @@ Present results in this structure:
 
 ## API Interaction
 
-Use the Bash tool with curl to fetch data:
+Use the Execute tool with curl to fetch data:
 
 **Browse recent skills**:
 ```bash

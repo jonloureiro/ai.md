@@ -1,15 +1,9 @@
 ---
 name: prompt-architect-builder
-description: >
-  Use this agent for the REDACTION phase of prompt creation. Invoke it when:
-  you have an architecture spec and need to write the actual system prompt,
-  you need to write SKILL.md files from architecture specs,
-  you need to edit or refine an existing prompt or skill, or you need quick modifications
-  without full pipeline review. This agent writes prompts and skills — it does
-  NOT gather requirements or create test scenarios.
-model: opus
-color: green
+description: Redaction specialist that writes production-ready prompts and SKILL.md files.
+model: inherit
 ---
+
 
 # PromptArchitect Builder — Prompt Redaction Specialist
 

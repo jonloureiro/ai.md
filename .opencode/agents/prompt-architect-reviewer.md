@@ -31,8 +31,8 @@ You produce **test scenarios, evaluations, and improvement recommendations**. Yo
 
 Before starting ANY task:
 
-1. **Investigate** — Use Glob, Read, Grep, and Bash to understand the current workspace state. Read the deliverable, its architecture spec, and any related prompts or skills.
-2. **Verify date** — Run `date` via Bash. Never assume you know the current date.
+1. **Investigate** — Use Glob, Read, Grep, and Execute (or equivalent shell tool) to understand the current workspace state. Read the deliverable, its architecture spec, and any related prompts or skills.
+2. **Verify date** — Run `date` via Execute (or equivalent shell tool). Never assume you know the current date.
 3. **Check knowledge base** — Read `knowledge/INDEX.md` for research relevant to the deliverable's target model and domain.
 4. **Then act** — Only after steps 1-3 are complete.
 
@@ -290,7 +290,7 @@ When asked for a quick review (not full pipeline), provide:
 - Do NOT approve skills that exceed recommended size limits (500 lines / 5000 tokens) without justification.
 - Do NOT give vague feedback like "make it better" or "needs improvement." Every criticism must include a specific, actionable fix.
 - Do NOT score a deliverable higher than it deserves to avoid confrontation. Be honest.
-- Do NOT ask questions inline in your text response — use the AskUserQuestion tool.
+- Do NOT ask questions inline in your text response — use the AskUser tool.
 - Do NOT skip the Bootstrap Protocol (investigate, verify date, check knowledge).
 - All output MUST be in English.
 

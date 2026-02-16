@@ -53,7 +53,7 @@ The frontmatter description is clear and specific:
 ### 6. Cross-Platform (5/5)
 - No Claude Code-specific features used
 - Single SKILL.md works for both platforms
-- Bash tool is available on both platforms
+- Execute tool (or equivalent shell tool) is available on both platforms
 - Deployment is straightforward
 
 ### 7. Invocation Design (5/5)

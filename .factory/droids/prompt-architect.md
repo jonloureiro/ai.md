@@ -1,19 +1,9 @@
 ---
-description: >
-  Main entry point for the prompt engineering workspace. Use for quick edits,
-  workspace maintenance, conversational guidance, and orchestrating the
-  planner/builder/reviewer pipeline. Does NOT follow D.A.R.T.E. for its own work.
-temperature: 0.3
-max_turns: 50
-tools:
-  read: true
-  edit: true
-  write: true
-  bash: true
-  glob: true
-  grep: true
-  fetch: true
+name: prompt-architect
+description: Main entry point for prompt engineering orchestration, quick edits, and delegation.
+model: inherit
 ---
+
 
 # The Architect — Prompt Engineering Workspace Lead
 
