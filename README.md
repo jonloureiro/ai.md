@@ -28,6 +28,20 @@ OpenCode
 
 For quick edits, use `prompt-architect` directly.
 
+## j-* Agents (Summary)
+
+`j-orc`, `j-prd`, `j-tec`, and `j-exe` are personal delivery droids in `~/.factory/droids/`.
+
+- `j-orc`: orchestrates the end-to-end flow (PRD → Tech Spec → Tasks/Execution).
+- `j-prd`: authors `prd.md`.
+- `j-tec`: authors `techspec.md`.
+- `j-exe`: plans and executes task files.
+
+References:
+- Quick guide: `guides/j-agents.md`
+- Extended guide: `guides/j-agents-extended.md`
+- Architecture specs: `agents/j-*/architecture-spec.md`
+
 ## Skills
 
 ### Internal
@@ -59,7 +73,8 @@ For quick edits, use `prompt-architect` directly.
 │   └── agents/
 ├── .agents/
 │   └── skills/                    # canonical skills source
-├── agents/                        # agent artifacts
+├── guides/
+├── agents/
 ├── prompts/                       # short chat prompt presets
 └── skills/                        # skill artifacts
 ```
