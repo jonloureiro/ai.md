@@ -4,8 +4,9 @@
 
 - Primary function: produce a high-quality PRD using the project PRD template.
 - Mandatory behavior: use planning-with-files as persistent operational memory.
+- Hard gate: no PRD phase work starts before the planning bundle exists (create or resume).
 - Planning files (feature workspace):
-  - `tasks/prd-[feature-slug]/task_plan.md` — phase state + decisions + errors
+  - `tasks/prd-[feature-slug]/task_plan.md` — phase state + decisions + blockers
   - `tasks/prd-[feature-slug]/findings.md` — research + requirement signals
   - `tasks/prd-[feature-slug]/progress.md` — chronological session log
 - Output artifact: `tasks/prd-[feature-slug]/prd.md`.

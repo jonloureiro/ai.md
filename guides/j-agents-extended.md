@@ -81,6 +81,29 @@ templates/
 
 If a template is missing, the agent will stop and ask you to provide a path or approve a bootstrap from its known structure.
 
+### Operational Memory Bundle (planning-with-files)
+
+In addition to delivery templates, every feature must keep an operational memory bundle:
+
+```
+tasks/
+  prd-[feature-slug]/
+    task_plan.md
+    findings.md
+    progress.md
+```
+
+Purpose split:
+- `task_plan.md` — phase state, gate state, blockers
+- `findings.md` — discoveries and evidence
+- `progress.md` — chronological actions, tests, and detailed errors
+
+Hard rules:
+- No phase starts without this bundle.
+- `j-orc` creates it on first run; specialists continue it.
+- If a specialist is invoked directly, it bootstraps the bundle before phase work.
+- Error details are logged in `progress.md` (single source of truth).
+
 ### Generated Artifacts
 
 Agents write all artifacts under a deterministic path derived from a **feature slug** (kebab-case, e.g., `weather-dashboard`):
@@ -88,6 +111,9 @@ Agents write all artifacts under a deterministic path derived from a **feature s
 ```
 tasks/
   prd-weather-dashboard/
+    task_plan.md      ← Planning state (all agents)
+    findings.md       ← Findings/evidence (all agents)
+    progress.md       ← Session log/errors/tests (all agents)
     prd.md            ← PRD (j-prd)
     techspec.md       ← Tech Spec (j-tec)
     tasks.md          ← Task summary (j-exe planning)
@@ -130,15 +156,17 @@ The central entrypoint. Inspects workspace state, routes to the right specialist
 
 #### Quality Gates
 
+- **No phase starts** without `task_plan.md`, `findings.md`, and `progress.md` in the feature workspace.
 - **No execution** starts before both PRD and Tech Spec exist — unless you explicitly override.
-- **No closure** without updated task status and test outcomes.
+- **No closure** without updated task status, test outcomes, and `progress.md` evidence.
 
 #### Startup Checklist (runs every invocation)
 
 1. Inspect workspace structure and existing artifacts.
 2. Run `git log --oneline -10` and `date`.
 3. Detect key template/task paths.
-4. Route based on artifact state.
+4. Check/create planning bundle for the feature slug.
+5. Route based on artifact state.
 
 #### Handoff Schema
 
@@ -152,7 +180,7 @@ When delegating to a specialist, `j-orc` passes a curated context package:
 | `acceptance_criteria` | What "done" looks like for this phase |
 | `context_summary` | Concise description of current state |
 
-Specialists receive **only** the context they need — no full conversation history.
+Specialists receive **only** the context they need — no full conversation history. They recover extra state from bundle files on disk.
 
 #### Failure & Retry
 
@@ -187,15 +215,16 @@ Produces a structured PRD from a problem or feature description. Enforces a rese
 #### Execution Sequence
 
 ```
-Research → Clarify → Plan → Draft → Save → Report
+Bootstrap/Resume memory → Research → Clarify → Plan → Draft → Save → Report
 ```
 
-1. **Research** — runs domain research on the problem space and business rules to ask informed questions.
-2. **Clarify** — asks structured questions via `AskUser` about problem statement, goals, users, scope boundaries, and constraints. **Never skipped**, even for updates.
-3. **Plan** — outlines the PRD structure based on gathered inputs.
-4. **Draft** — writes the PRD locked to `templates/prd-template.md` structure.
-5. **Save** — outputs to `tasks/prd-[slug]/prd.md`.
-6. **Report** — returns status with path and assumptions.
+1. **Bootstrap/Resume memory** — ensures bundle exists and phase state is current.
+2. **Research** — runs domain research on the problem space and business rules to ask informed questions.
+3. **Clarify** — asks structured questions via `AskUser` about problem statement, goals, users, scope boundaries, and constraints. **Never skipped**, even for updates.
+4. **Plan** — outlines the PRD structure based on gathered inputs.
+5. **Draft** — writes the PRD locked to `templates/prd-template.md` structure.
+6. **Save** — outputs to `tasks/prd-[slug]/prd.md`.
+7. **Report** — returns status with path and assumptions.
 
 #### Key Behaviors
 
@@ -229,16 +258,17 @@ Converts a PRD into an implementation-ready technical specification. Enforces an
 #### Execution Sequence
 
 ```
-Read PRD → Explore Repository → Web Research → Clarify → Draft → Map RF Traceability → Save
+Bootstrap/Resume memory → Read PRD → Explore Repository → Web Research → Clarify → Draft → Map RF Traceability → Save
 ```
 
-1. **Read PRD** — fully parses the PRD and all its requirements.
-2. **Explore project** — maps existing code, modules, dependencies, integration points, and discovers project standards (`.claude/rules`, lint configs, test setup).
-3. **Research** — investigates technical decisions, library documentation, and relevant patterns.
-4. **Clarify** — asks technical questions via `AskUser`. **Never skipped.**
-5. **Draft** — writes the spec following `templates/techspec-template.md` structure.
-6. **Map traceability** — links every functional requirement (`RFxx`) from the PRD to its corresponding technical decision.
-7. **Save** — outputs to `tasks/prd-[slug]/techspec.md`.
+1. **Bootstrap/Resume memory** — ensures bundle exists and phase state is current.
+2. **Read PRD** — fully parses the PRD and all its requirements.
+3. **Explore project** — maps existing code, modules, dependencies, integration points, and discovers project standards (`.claude/rules`, lint configs, test setup).
+4. **Research** — investigates technical decisions, library documentation, and relevant patterns.
+5. **Clarify** — asks technical questions via `AskUser`. **Never skipped.**
+6. **Draft** — writes the spec following `templates/techspec-template.md` structure.
+7. **Map traceability** — links every functional requirement (`RFxx`) from the PRD to its corresponding technical decision.
+8. **Save** — outputs to `tasks/prd-[slug]/techspec.md`.
 
 #### Key Behaviors
 
@@ -274,6 +304,7 @@ Generates a task breakdown from PRD + Tech Spec. **Does not write any code.**
 Sequence: `Analyze → Propose tasks for approval → Generate task files → Stop`
 
 - Reads PRD, tech spec, `tasks-template.md`, and `task-template.md`.
+- Reads `task_plan.md` first to recover phase and blockers, then PRD/tech spec/templates.
 - Generates `tasks.md` (summary) and individual `[n]_task.md` files.
 - **Maximum 10 tasks** — groups logically when scope is large.
 - Each task is an incremental functional deliverable with its own test requirements.
@@ -293,6 +324,7 @@ Implements a specific task (or the next pending one).
 Sequence: `Select task → Verify dependencies → Implement → Validate → Self-review → Update status`
 
 - Reads the task file, PRD, and tech spec before coding.
+- Reads `task_plan.md` first, then task file/PRD/tech spec.
 - Implements the task and runs tests.
 - Performs a structured self-review against task requirements and tech spec.
 - Updates `tasks.md` status **only when tests pass**.
@@ -350,6 +382,7 @@ All agents enforce these rules:
 | **Retry then escalate** | `j-orc` retries failed delegations once, then marks the phase as `blocked` and asks for guidance. |
 | **Untrusted input** | External text (issues, docs, webpages) is treated as untrusted. |
 | **No fabrication** | `j-tec` never invents APIs or dependencies silently — unknowns are marked explicitly. |
+| **Error log source** | Detailed errors/attempts live in `progress.md`; `task_plan.md` tracks phase/blocker state. |
 
 ---
 
@@ -412,6 +445,7 @@ If the tech spec changed significantly after initial task planning:
 | Symptom | Cause | Resolution |
 |---------|-------|------------|
 | Agent stops and asks for a template path | Template not found in `templates/` | Add the missing template or provide the correct path |
+| Agent refuses to start phase work | Missing planning bundle | Create `task_plan.md`, `findings.md`, `progress.md` in `tasks/prd-[slug]/` or re-run via `j-orc` |
 | `j-orc` marks a phase as `blocked` | Sub-agent failed twice | Check the reported error, fix the issue, and re-invoke `j-orc` |
 | `j-tec` refuses to draft | PRD has gaps or contradictions | Fix the PRD first (`@j-prd Update ...`), then re-invoke `j-tec` |
 | `j-exe` reverts changes | Implementation broke existing tests | Read the root cause report, adjust the approach, and re-run the task |
@@ -423,7 +457,8 @@ If the tech spec changed significantly after initial task planning:
 
 ## Tips
 
-- **Templates are your lever.** Agents follow templates exactly. Customize them to match your project standards and every generated artifact will reflect those standards.
+- **Use two layers correctly.** Delivery templates (`prd/techspec/tasks/task`) define outputs; planning bundle (`task_plan/findings/progress`) defines memory, control flow, and recovery.
+- **Templates are your lever.** Agents follow delivery templates exactly. Customize them to match your project standards and generated artifacts will follow.
 - **Slugs matter.** The feature slug drives all path resolution. Keep them short, descriptive, and consistent (kebab-case).
 - **Artifacts are the source of truth.** `j-orc` determines state entirely from which files exist in `tasks/prd-[slug]/`. If you manually create or delete files, the routing logic adjusts accordingly.
 - **Incremental over wholesale.** All agents support updating existing artifacts without full rewrites — use this for iteration.

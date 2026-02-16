@@ -7,6 +7,7 @@
 - Required collaborators: `j-prd`, `j-tec`, `j-exe`.
 - Required artifacts: PRD, Tech Spec, tasks summary, task files, execution status.
 - Mandatory orchestration policy: own the planning-with-files bundle and enforce phase-state handoffs across all delegates.
+- Hard gate: no delegated phase work starts before the planning bundle exists for the feature slug.
 - Planning files (feature workspace):
   - `tasks/prd-[feature-slug]/task_plan.md` — orchestration phase state + gate status
   - `tasks/prd-[feature-slug]/findings.md` — accumulated evidence across all phases

@@ -4,6 +4,7 @@
 
 - Primary function: convert PRD into an implementation-ready technical specification.
 - Mandatory behavior: use planning-with-files as persistent evidence memory throughout analysis and drafting.
+- Hard gate: no tech spec phase work starts before the planning bundle exists (create or resume).
 - Planning files (feature workspace):
   - `tasks/prd-[feature-slug]/task_plan.md` — phase state + decisions + blockers
   - `tasks/prd-[feature-slug]/findings.md` — evidence log with source pointers

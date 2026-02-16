@@ -44,11 +44,30 @@ templates/
   task-template.md
 ```
 
+Agents also require a **planning-with-files bundle** inside each feature workspace:
+
+```
+tasks/
+  prd-[feature-slug]/
+    task_plan.md
+    findings.md
+    progress.md
+```
+
+Hard rules:
+- No phase starts without the bundle.
+- `j-orc` creates the bundle on first run; specialists continue it.
+- If a specialist is invoked directly, it bootstraps the bundle before proceeding.
+- Error details are logged in `progress.md` (single source of truth).
+
 Artifacts are written to:
 
 ```
 tasks/
   prd-[feature-slug]/
+    task_plan.md
+    findings.md
+    progress.md
     prd.md
     techspec.md
     tasks.md
@@ -69,18 +88,19 @@ Use `j-orc` when you want end-to-end delivery from a feature request. It routes 
 
 `j-orc` will:
 
-1. **Detect state** — check which artifacts exist in `tasks/prd-[slug]/`.
-2. **Route** — delegate to the appropriate specialist:
+1. **Bootstrap memory** — create or resume `task_plan.md`, `findings.md`, and `progress.md`.
+2. **Detect state** — check which artifacts exist in `tasks/prd-[slug]/`.
+3. **Route** — delegate to the appropriate specialist:
    - No PRD → `j-prd`
    - PRD exists, no tech spec → `j-tec`
    - PRD + tech spec, no tasks → `j-exe` (planning mode)
    - Tasks exist → `j-exe` (execution mode)
-3. **Gate** — no execution starts before PRD + Tech Spec exist (unless you explicitly override).
-4. **Report** — return a structured status block after each phase.
+4. **Gate** — no execution starts before PRD + Tech Spec exist (unless you explicitly override).
+5. **Report** — return a structured status block after each phase.
 
 #### Re-entry
 
-If a session is interrupted, invoke `j-orc` again on the same feature. It inspects existing artifacts and resumes from the correct phase.
+If a session is interrupted, invoke `j-orc` again on the same feature. It reads `task_plan.md` first, reconciles artifact state, and resumes from the correct phase.
 
 #### Skipping Phases
 
@@ -102,10 +122,11 @@ Use `j-prd` directly when you only need a PRD and want fine-grained control over
 
 Workflow:
 
-1. **Research** — runs domain research on the problem space.
-2. **Clarify** — asks structured questions via `AskUser` (never skipped, even for updates).
-3. **Draft** — writes the PRD locked to the template structure.
-4. **Save** — outputs to `tasks/prd-[slug]/prd.md`.
+1. **Bootstrap/Resume memory** — ensure the planning bundle exists and current phase is set.
+2. **Research** — runs domain research on the problem space.
+3. **Clarify** — asks structured questions via `AskUser` (never skipped, even for updates).
+4. **Draft** — writes the PRD locked to the template structure.
+5. **Save** — outputs to `tasks/prd-[slug]/prd.md`.
 
 To update an existing PRD:
 
@@ -125,12 +146,13 @@ Use `j-tec` when you have a PRD and need a technical specification.
 
 Workflow:
 
-1. **Read PRD** — fully parses the PRD and its requirements.
-2. **Explore project** — maps existing code, modules, dependencies, and integration points.
-3. **Research** — investigates technical decisions and library documentation.
-4. **Clarify** — asks technical questions via `AskUser`.
-5. **Draft** — writes the spec with explicit PRD traceability (`RFxx` → technical decision).
-6. **Save** — outputs to `tasks/prd-[slug]/techspec.md`.
+1. **Bootstrap/Resume memory** — ensure the planning bundle exists and current phase is set.
+2. **Read PRD** — fully parses the PRD and its requirements.
+3. **Explore project** — maps existing code, modules, dependencies, and integration points.
+4. **Research** — investigates technical decisions and library documentation.
+5. **Clarify** — asks technical questions via `AskUser`.
+6. **Draft** — writes the spec with explicit PRD traceability (`RFxx` → technical decision).
+7. **Save** — outputs to `tasks/prd-[slug]/techspec.md`.
 
 Key behaviors:
 
@@ -151,6 +173,7 @@ Generate task breakdown from PRD + Tech Spec:
 ```
 
 - Reads PRD, tech spec, and templates.
+- Reads `task_plan.md` first, then PRD, tech spec, and templates.
 - Generates `tasks.md` (summary) and individual `[n]_task.md` files.
 - Maximum 10 tasks; groups logically when scope is large.
 - Each task is an incremental functional deliverable with test requirements.
@@ -165,6 +188,7 @@ Implement a specific task:
 ```
 
 - Reads the task file, PRD, and tech spec before coding.
+- Reads `task_plan.md` first to recover phase and blockers before coding.
 - Implements the task, runs tests, and self-reviews.
 - Updates `tasks.md` status only when tests pass.
 - If implementation breaks existing tests, reverts changes and reports the failure.
@@ -193,10 +217,12 @@ All agents share these rules:
 - **Validation gates** — `j-exe` never marks a task complete without passing tests.
 - **Rollback** — `j-exe` reverts broken implementations automatically.
 - **Retry policy** — `j-orc` retries failed delegations once, then marks the phase as blocked and asks for guidance.
+- **Error log source** — detailed errors and attempts live in `progress.md`; `task_plan.md` tracks phase/blocker state.
 
 ## Tips
 
 - **Start with `j-orc`** for most feature work. Use individual agents only when you need granular control over a specific phase.
-- **Templates matter** — agents are template-locked. Customize templates to match your project standards; the agents will follow them.
+- **Two layers, two purposes** — delivery templates (`prd/techspec/tasks/task`) define outputs; planning bundle (`task_plan/findings/progress`) defines agent memory and control flow.
+- **Templates matter** — agents are template-locked for delivery artifacts. Customize them to match your project standards.
 - **Incremental updates** — all agents support updating existing artifacts without full rewrites.
 - **Phase skipping** — tell `j-orc` which artifacts already exist to skip phases you've handled manually.

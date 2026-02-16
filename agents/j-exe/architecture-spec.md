@@ -5,6 +5,7 @@
 - Primary function: execute project tasks with high autonomy for reversible actions.
 - Mandatory inputs before implementation: PRD, Tech Spec, tasks summary, and target task file.
 - Mandatory operational policy: use planning-with-files as execution memory and audit trail.
+- Hard gate: no planning/execution phase work starts before the planning bundle exists (create or resume).
 - Planning files (feature workspace):
   - `tasks/prd-[feature-slug]/task_plan.md` — phase state + blockers
   - `tasks/prd-[feature-slug]/findings.md` — implementation discoveries + dependency notes
