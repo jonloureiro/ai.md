@@ -7,8 +7,12 @@
 - Required collaborators: `j-prd`, `j-tec`, `j-exe`.
 - Required artifacts: PRD, Tech Spec, tasks summary, task files, execution status.
 - Mandatory orchestration policy: own the planning-with-files bundle and enforce phase-state handoffs across all delegates.
-- Hard gate: no delegated phase work starts before the planning bundle exists for the feature slug.
-- Planning files (feature workspace):
+- Hard gate: no delegated phase work starts before the planning-with-files bundle exists for the feature slug.
+- planning-with-files templates (workspace):
+  - `templates/task_plan.md`
+  - `templates/findings.md`
+  - `templates/progress.md`
+- planning-with-files files (feature workspace):
   - `tasks/prd-[feature-slug]/task_plan.md` — orchestration phase state + gate status
   - `tasks/prd-[feature-slug]/findings.md` — accumulated evidence across all phases
   - `tasks/prd-[feature-slug]/progress.md` — chronological log of actions + errors
@@ -21,17 +25,21 @@
   - `templates/techspec-template.md`
   - `templates/tasks-template.md`
   - `templates/task-template.md`
+  - `templates/task_plan.md`
+  - `templates/findings.md`
+  - `templates/progress.md`
   - `tasks/prd-[feature-slug]/...`
-- Planning files live inside the feature workspace; planning templates are used if available.
+- planning-with-files files live inside the feature workspace and are initialized from `templates/*.md`.
 
 ## Design Decisions
 
-1. **Planning file ownership belongs to `j-orc`**:
-   - `j-orc` creates the planning bundle on first invocation for a feature slug.
-   - Delegates receive existing planning files -- they read and append, never overwrite.
+1. **planning-with-files bundle ownership belongs to `j-orc`**:
+   - `j-orc` creates the planning-with-files bundle on first invocation for a feature slug.
+   - Bundle initialization is template-driven: copy from `templates/task_plan.md`, `templates/findings.md`, and `templates/progress.md`.
+   - Delegates receive existing planning-with-files files -- they read and append, never overwrite.
    - If a specialist is invoked directly (without `j-orc`), it creates the bundle itself. `j-orc` reconciles on re-entry.
 2. **Manager pattern with persistent state**:
-   - Orchestration state persisted in planning files, not only in conversation context.
+   - Orchestration state persisted in planning-with-files files, not only in conversation context.
    - `task_plan.md` defines active phase and gate conditions.
 3. **Stateful phase model**:
    - Phase A: Discovery and scope framing
@@ -43,7 +51,7 @@
 4. **Context curation (minimal handoff)**:
    - Delegated calls receive curated context, not full thread history.
    - Handoff fields: `feature_slug`, `artifact_paths`, `current_phase`, `constraints`, `acceptance_criteria`, `context_summary`.
-   - Delegates access planning files on disk for additional state -- no need to duplicate it in the handoff payload.
+   - Delegates access planning-with-files files on disk for additional state -- no need to duplicate it in the handoff payload.
    - Trade-off: fewer handoff fields = less context overhead per delegation, at the cost of requiring file reads by the delegate.
 5. **Skip/override policy**:
    - User can explicitly skip phases (e.g., "already have a PRD, go to tech spec").
@@ -69,8 +77,8 @@
 11. **Startup checklist (every invocation)**:
     - Inspect workspace structure and existing artifacts.
     - Run `git log --oneline -10` and `date`.
-    - Detect key template/task paths.
-    - Check/create planning bundle for feature slug.
+    - Detect key template/task paths, including `templates/task_plan.md`, `templates/findings.md`, and `templates/progress.md`.
+    - Check/create planning-with-files bundle for feature slug.
     - Route based on artifact state.
 
 ## Safety Layer
@@ -84,14 +92,15 @@
 
 - `j-orc` runs requests end-to-end with explicit, persisted phase transitions.
 - Delegate handoffs are minimal but sufficient (curated context + file references).
-- Failures/retries/blockers are traceable in planning files.
+- Failures/retries/blockers are traceable in planning-with-files files.
 - Final integrated status includes reproducible artifact paths, risks, and next action.
 - Closure occurs only after all completion gates pass.
+- Planning-with-files bundle files are template-aligned with `templates/*.md` (`task_plan.md`, `findings.md`, `progress.md`).
 
 ## Notes for Builder
 
 - Keep prompt concise, operational, and orchestration-centric.
-- Enforce planning-bundle creation/check before every delegation.
+- Enforce planning-with-files bundle creation/check before every delegation, using `templates/task_plan.md`, `templates/findings.md`, and `templates/progress.md` for initialization.
 - Define a strict output contract:
 
 ```md
