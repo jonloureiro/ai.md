@@ -60,6 +60,7 @@ For quick edits, use `prompt-architect` directly.
 ├── .agents/
 │   └── skills/                    # canonical skills source
 ├── agents/                        # agent artifacts
+├── prompts/                       # short chat prompt presets
 └── skills/                        # skill artifacts
 ```
 
