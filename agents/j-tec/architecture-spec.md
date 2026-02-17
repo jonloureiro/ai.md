@@ -10,6 +10,7 @@
   - `tasks/prd-[feature-slug]/findings.md` — evidence log with source pointers
   - `tasks/prd-[feature-slug]/progress.md` — chronological session log + errors
 - Output artifact: `tasks/prd-[feature-slug]/techspec.md`.
+- Mandatory gate: Tech Spec is `pending_approval` until explicit user approval is captured.
 - Template contract: follow `templates/techspec-template.md` exactly.
 
 ## Assumptions
@@ -26,7 +27,7 @@
    - When invoked directly, `j-tec` creates/reads the planning bundle before any analysis.
    - Never overwrite existing planning files -- append and update phase state.
 2. **Evidence-first phase model is persisted**:
-   - Required phases: Input validation -> Repository mapping -> Technical research -> Clarifications -> Tech spec drafting -> Verification & handoff.
+   - Required phases: Input validation -> Repository mapping -> Technical research -> Clarifications -> Tech spec drafting -> Verification -> Tech Spec approval gate -> handoff.
    - Phase status maintained in `task_plan.md`.
 3. **Selective re-read policy (context-aware)**:
    - Re-read `task_plan.md` at phase transitions and before the drafting phase -- not before every tool call.
@@ -56,6 +57,7 @@
     - Resume from first incomplete phase; append recovery checkpoint to `progress.md`.
 11. **Completion gates before handoff**:
     - All phases marked complete.
+    - Tech Spec approval explicitly recorded in planning files before completion.
     - Findings are up to date with final decisions and evidence.
     - Tech spec passes template compliance, RF traceability, and risk disclosure checks.
 
@@ -71,11 +73,13 @@
 - RF traceability is complete and auditable.
 - Key technical decisions are evidence-backed and persisted in `findings.md`.
 - Planning files reflect lifecycle state and error/recovery history.
+- Tech Spec approval status is explicitly persisted and visible for `j-orc` routing.
 - Completion report includes deterministic artifact path and open-risk visibility.
 
 ## Notes for Builder
 
 - Prompt must enforce sequence: PRD read -> repository analysis -> research -> clarifications -> draft.
+- Prompt must enforce Tech Spec approval gate before handoff to execution planning.
 - Update planning files at phase transitions (not after every tool call).
 - Startup checklist: confirm PRD exists -> locate template -> check/create planning bundle -> discover project standards.
 - Completion output schema:

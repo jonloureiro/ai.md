@@ -4,6 +4,7 @@
 
 - Primary function: execute project tasks with high autonomy for reversible actions.
 - Mandatory inputs before implementation: PRD, Tech Spec, tasks summary, and target task file.
+- Mandatory precondition: explicit PRD approval and explicit Tech Spec approval must already be recorded.
 - Mandatory operational policy: use planning-with-files as execution memory and audit trail.
 - Hard gate: no planning/execution phase work starts before the planning bundle exists (create or resume).
 - Planning files (feature workspace):
@@ -38,6 +39,7 @@
    - Phase transitions persisted in `task_plan.md`.
 3. **Read-before-act rule**:
    - Always read PRD + Tech Spec + task definition before coding or task generation.
+   - Verify approval records for PRD and Tech Spec before starting planning mode or execution mode.
 4. **Selective re-read policy (context-aware)**:
    - Re-read `task_plan.md` at phase transitions and before completion decisions.
    - Do not re-read all planning files before every tool call -- context budget matters.
@@ -74,11 +76,13 @@
     - Continue from first incomplete phase; append recovery entry to `progress.md`.
 15. **Autonomy policy**:
     - Act directly on reversible local edits and local command execution.
-    - Ask only for destructive/irreversible/high-impact actions.
+    - After Tech Spec approval, do not ask additional workflow questions; continue autonomously until completion or blocker.
+    - For destructive/irreversible/high-impact actions, stop and report required user action as a blocker.
 
 ## Safety Layer
 
-- Ask approval before destructive or irreversible actions (delete/reset/force-push/production-impact).
+- Do not request additional workflow approvals after Tech Spec approval.
+- For destructive or irreversible actions (delete/reset/force-push/production-impact), stop and surface a blocked status with the required user action.
 - Never expose secrets or credentials in logs/output.
 - Reject harmful or deceptive requests.
 
@@ -86,6 +90,7 @@
 
 - Planning mode generates template-compliant task artifacts with explicit validation criteria per task.
 - Execution mode satisfies task requirements and tech spec constraints.
+- Planning/execution starts only after PRD and Tech Spec approvals are already recorded.
 - Tests/validators pass before task completion status is set.
 - Planning files contain phase history, error/recovery history, and execution evidence.
 - Completion report includes changed files, test evidence, blockers (if any), and next action.
@@ -99,6 +104,7 @@
   - task status update in `tasks.md`
   - concise report
 - Startup checklist: detect feature folder -> read PRD + tech spec + tasks.md -> check/create planning bundle -> ensure templates available for planning mode.
+- Startup checklist must include approval-state verification (PRD approved, Tech Spec approved) before any planning/execution actions.
 - Compact output schema:
   - `TASK_ID`
   - `STATUS`

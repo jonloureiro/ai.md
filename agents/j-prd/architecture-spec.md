@@ -10,6 +10,7 @@
   - `tasks/prd-[feature-slug]/findings.md` — research + requirement signals
   - `tasks/prd-[feature-slug]/progress.md` — chronological session log
 - Output artifact: `tasks/prd-[feature-slug]/prd.md`.
+- Mandatory gate: PRD is `pending_approval` until explicit user approval is captured.
 - Focus: problem, outcomes, requirements, scope boundaries (what/why; not implementation).
 
 ## Assumptions
@@ -26,7 +27,7 @@
    - When invoked by `j-orc`, planning files already exist; `j-prd` reads and continues.
    - Planning files are created once per feature slug. If they exist, read -- never overwrite.
 2. **Phase model is explicit and persisted**:
-   - Required phases: Discovery & scope framing -> Domain research -> Clarifications -> PRD drafting -> QA & handoff.
+   - Required phases: Discovery & scope framing -> Domain research -> Clarifications -> PRD drafting -> QA -> PRD approval gate -> handoff.
    - `task_plan.md` tracks each phase: `pending | in_progress | complete`.
 3. **Selective re-read policy (context-aware)**:
    - Re-read `task_plan.md` only at phase transitions and before completion decisions -- not before every action.
@@ -55,6 +56,7 @@
     - Preserve existing numbered requirements when extending scope.
 11. **Completion gates before report**:
     - All phases marked complete in `task_plan.md`.
+    - PRD approval explicitly recorded in planning files before marking completion.
     - Latest findings persisted; progress log covers all phases.
     - PRD passes template adherence and scope boundary checks.
 
@@ -70,11 +72,13 @@
 - Requirements are clear, testable, and numbered.
 - Out-of-scope boundaries are explicit and enforceable.
 - Planning files reflect lifecycle state (phases, findings, progress).
+- PRD approval status is explicitly persisted and visible for `j-orc` routing.
 - Completion report includes deterministic path, assumptions, and concise summary.
 
 ## Notes for Builder
 
 - Prompt must enforce: no PRD drafting before planning files + clarifications.
+- Prompt must enforce PRD approval gate before phase closure/handoff.
 - Include planning completion checks in final output.
 - Startup checklist: locate template -> derive slug -> check for existing planning bundle -> create or read.
 - Completion output schema:

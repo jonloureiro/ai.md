@@ -6,6 +6,7 @@
 - Target users: PMs, tech leads, and developers needing a single workflow entrypoint.
 - Required collaborators: `j-prd`, `j-tec`, `j-exe`.
 - Required artifacts: PRD, Tech Spec, tasks summary, task files, execution status.
+- Mandatory user approvals (strict order): PRD approval first, Tech Spec approval second.
 - Mandatory orchestration policy: own the planning-with-files bundle and enforce phase-state handoffs across all delegates.
 - Hard gate: no delegated phase work starts before the planning-with-files bundle exists for the feature slug.
 - planning-with-files templates (workspace):
@@ -43,8 +44,8 @@
    - `task_plan.md` defines active phase and gate conditions.
 3. **Stateful phase model**:
    - Phase A: Discovery and scope framing
-   - Phase B: PRD authoring (`j-prd`)
-   - Phase C: Tech Spec authoring (`j-tec`)
+   - Phase B: PRD authoring (`j-prd`) + mandatory PRD approval gate
+   - Phase C: Tech Spec authoring (`j-tec`) + mandatory Tech Spec approval gate
    - Phase D: Tasks planning + execution (`j-exe`)
    - Phase E: Integration and closure summary
    - Each phase has entry/exit criteria recorded in `task_plan.md`.
@@ -54,8 +55,8 @@
    - Delegates access planning-with-files files on disk for additional state -- no need to duplicate it in the handoff payload.
    - Trade-off: fewer handoff fields = less context overhead per delegation, at the cost of requiring file reads by the delegate.
 5. **Skip/override policy**:
-   - User can explicitly skip phases (e.g., "already have a PRD, go to tech spec").
-   - `j-orc` validates that the referenced artifact exists before skipping.
+   - User can skip authoring only when the referenced artifact already exists.
+   - Approval gates are never skipped: `j-orc` must capture explicit PRD approval and explicit Tech Spec approval in this order.
    - Skip action logged in `progress.md` with rationale.
 6. **Failure persistence and retry policy**:
    - On delegate failure/incomplete output, log failure in `progress.md` with root cause.
@@ -64,16 +65,21 @@
    - On re-entry, read `task_plan.md` first and recover phase state before routing.
    - If artifact state and plan diverge (e.g., files created outside the pipeline), write reconciliation note to `progress.md` and update `task_plan.md` before proceeding.
 8. **Quality gates**:
-   - No execution before PRD + Tech Spec exist (unless user explicitly overrides).
+   - No Tech Spec work before explicit user approval of PRD.
+   - No tasks/execution before explicit user approval of Tech Spec.
    - No closure before task status + validation outcomes + progress log are updated.
 9. **Routing policy**:
    - No PRD -> delegate to `j-prd`.
-   - PRD exists and no tech spec -> delegate to `j-tec`.
-   - PRD + tech spec and no tasks -> delegate to `j-exe` planning mode.
+   - PRD drafted but not approved -> request PRD approval and wait.
+   - PRD approved and no tech spec -> delegate to `j-tec`.
+   - Tech Spec drafted but not approved -> request Tech Spec approval and wait.
+   - Tech Spec approved and no tasks -> delegate to `j-exe` planning mode.
    - Tasks exist and implementation requested -> delegate to `j-exe` execution mode.
 10. **Decision policy**:
     - Act directly for reversible orchestration actions.
-    - Ask only for destructive/irreversible/high-impact actions, major trade-offs, or missing required inputs.
+    - Mandatory asks in normal flow are only the two approval gates (PRD, then Tech Spec).
+    - After Tech Spec approval, continue end-to-end without additional user questions.
+    - For destructive/irreversible/high-impact actions, stop and report required user action instead of asking additional workflow questions.
 11. **Startup checklist (every invocation)**:
     - Inspect workspace structure and existing artifacts.
     - Run `git log --oneline -10` and `date`.
@@ -91,6 +97,7 @@
 ## Success Criteria
 
 - `j-orc` runs requests end-to-end with explicit, persisted phase transitions.
+- PRD and Tech Spec approvals are explicitly recorded and enforced in order.
 - Delegate handoffs are minimal but sufficient (curated context + file references).
 - Failures/retries/blockers are traceable in planning-with-files files.
 - Final integrated status includes reproducible artifact paths, risks, and next action.
@@ -101,6 +108,8 @@
 
 - Keep prompt concise, operational, and orchestration-centric.
 - Enforce planning-with-files bundle creation/check before every delegation, using `templates/task_plan.md`, `templates/findings.md`, and `templates/progress.md` for initialization.
+- Enforce strict approval gates: PRD approval is mandatory before Tech Spec, and Tech Spec approval is mandatory before tasks/execution.
+- After Tech Spec approval, enforce autonomous continuation without additional user questioning.
 - Define a strict output contract:
 
 ```md
