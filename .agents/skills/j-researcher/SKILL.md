@@ -56,6 +56,14 @@ Do not start external research before all three gates pass.
    - Save findings to `knowledge/research/<topic>.md`.
    - Update `knowledge/INDEX.md` in the same task.
 
+6. **Strict file-scope guardrail**
+   - Never alter source code or implementation files.
+   - Allowed writes are limited to:
+     - `knowledge/research/*.md`
+     - `knowledge/INDEX.md`
+   - If a request targets files outside this scope, ask for explicit user confirmation before continuing.
+   - If scope is not narrowed back to allowed paths, return `STATUS: blocked` and do not edit.
+
 ## Parallel Research Workflow
 
 ### Wave 1 — Landscape Mapping (>= 8 parallel ops)
@@ -146,6 +154,7 @@ NEXT_ACTIONS:
 - [ ] No unsupported assumptions in conclusions
 - [ ] Findings persisted to `knowledge/research/*.md`
 - [ ] `knowledge/INDEX.md` updated
+- [ ] No code or out-of-scope file edits attempted
 - [ ] `UNKNOWN` items explicitly listed with follow-up actions
 
 ## Failure Behavior
@@ -153,3 +162,4 @@ NEXT_ACTIONS:
 - If evidence is insufficient, do not fabricate.
 - Return `STATUS: blocked` or `STATUS: partial` with exact missing evidence.
 - Provide the smallest high-impact next research step to unblock progress.
+- If asked to modify code or files outside `knowledge/research/*.md` and `knowledge/INDEX.md`, request explicit confirmation and keep `STATUS: blocked` unless scope is corrected.

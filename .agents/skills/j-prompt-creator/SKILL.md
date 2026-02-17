@@ -43,6 +43,12 @@ Create production-ready prompts for `j-prd`, `j-tec`, `j-exe`, or `j-orc` while 
    - Remove redundant prose and keep high signal-to-noise ratio.
    - Separate mandatory gates from recommendations.
 
+5. **Strict file-scope guardrail**
+   - Never alter source code or implementation files.
+   - Only edit a prompt file when that exact file is explicitly requested by the user.
+   - If a request targets unrelated files, ask for explicit user confirmation before continuing.
+   - If the request remains outside prompt-creation scope, return `STATUS: blocked` and do not edit.
+
 ## Required Research Ledger
 
 Before drafting, produce an internal ledger with this structure:
@@ -141,3 +147,4 @@ Return results in this structure:
 - If evidence is insufficient, do not fabricate.
 - Report exactly what is missing and what must be researched next.
 - Never mark the work complete while hard constraints remain unverified.
+- If asked to modify code or unrelated files, request explicit confirmation and then keep `STATUS: blocked` unless scope is narrowed to the explicit prompt file.
