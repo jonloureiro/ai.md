@@ -17,6 +17,7 @@
 | [techspec-template-driven-authoring.md](research/techspec-template-driven-authoring.md) | Evidence-first, template-locked technical specification authoring patterns | 2026-02-16 | Current |
 | [task-execution-autonomy-guardrails.md](research/task-execution-autonomy-guardrails.md) | Task planning/execution modes, autonomy boundaries, and completion guardrails | 2026-02-16 | Current |
 | [j-researcher-skill-research.md](research/j-researcher-skill-research.md) | Deep-research skill contract for `j-*` agents: date-first, knowledge-first, high-parallel research, and mandatory persistence into `knowledge/` | 2026-02-17 | Current |
+| [j-rev-and-j-qa-architecture.md](research/j-rev-and-j-qa-architecture.md) | Deep architecture contract for j-rev/j-qa with QA evidence model (Playwright, WCAG 2.2, agent-browser fallback) and code-review security gates | 2026-02-17 | Current |
 
 ## Freshness Rules
 
